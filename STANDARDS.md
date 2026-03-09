@@ -157,13 +157,35 @@ Each belief is numbered `B-xxx` with associated tests `T-xxxN`:
 
 ## Setup
 
+### 1. Scaffold the files
+
 Run `setup.sh` to scaffold a new project:
 
 ```bash
 ./setup.sh --name "My Project" --dir ~/path/to/project
+./setup.sh --name "My Project" --dir ~/path/to/project --investigations  # include beliefs-and-tests.md
 ```
 
 Or manually copy templates and customize.
+
+### 2. Start the first session
+
+Use one of the starter prompts as your first message to Claude:
+
+| Scenario | Template |
+|----------|----------|
+| **Brand new project** (greenfield or just scaffolded) | `templates/starter-prompt-new-project.md` |
+| **Existing project** (adopting workflow into a codebase with history) | `templates/starter-prompt-existing-project.md` |
+
+The starter prompts guide Claude through:
+- **New project:** Reading CLAUDE.md, filling in ARCHITECTURE.md and MEMORY.md, then starting on goals
+- **Existing project:** Exploring the codebase, backfilling all 4 docs from existing code and decisions, customizing the hook
+
+### 3. Customize the hook
+
+Edit `.claude/hooks/context-recovery.sh` to add:
+- Project-specific past failures (the "why this matters" section)
+- Your dev commands (build, test, run)
 
 ## Adopting Workflow Upgrades
 
