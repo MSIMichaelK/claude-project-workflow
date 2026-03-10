@@ -51,7 +51,8 @@ All feature work happens in worktrees, never directly on `main`.
 
 - **Create:** `claude -w issue-N-slug` (named) or click "+ New session" in Desktop
 - **Active worktrees** live at `.claude/worktrees/` (gitignored)
-- **Each worktree** gets its own branch and version bump
+- **Changelog fragments:** Write to `.changelog/<issue>-<slug>.md` — NEVER edit CHANGELOG.md or version numbers directly
+- **Release assembly** (version bump, CHANGELOG, tag) happens on main after PR merges
 - **Merge** via `gh pr create` to `main`
 - **See** `.claude/worktree-prompt-template.md` for how to start a new session
 

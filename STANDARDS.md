@@ -85,15 +85,61 @@ All feature work happens in worktrees, never directly on `main`. This prevents m
 ### Creating Worktrees
 
 - **CLI:** `claude -w issue-N-slug` (named) or `claude -w` (auto-named)
-- **Desktop:** Click "+ New session"
+- **Desktop:** Click "+ New session" — each session automatically gets an isolated worktree
 
 ### Starting a New Session
 
 Use `.claude/worktree-prompt-template.md` — fill in issue number, scope, related issues, and key context. Paste as the first message in the new session.
 
+### Changelog Fragments (Conflict-Free Releases)
+
+**Problem:** Multiple worktrees all insert entries at the top of CHANGELOG.md, add rows to version history tables, and update version numbers. Even with different version numbers, these edits target the same lines and always conflict.
+
+**Solution:** Worktrees write changelog fragments instead of editing shared release files.
+
+Each worktree writes a single file:
+```
+.changelog/<issue>-<slug>.md
+```
+
+Fragment format (use only sections you need):
+```markdown
+### Added
+- **Feature name** (#issue) — description
+
+### Fixed
+- **Bug name** (#issue) — description
+
+### Discovered
+- **Finding** (#issue) — description
+```
+
+**Worktrees NEVER edit:**
+- `CHANGELOG.md` — assembled at release time
+- Version numbers in CLAUDE.md, ARCHITECTURE.md, MEMORY.md
+- Version history tables
+
+**Worktrees CAN edit** (low conflict risk — append-only, different sections):
+- `docs/as-built.md` — new AB-xxx entries
+- `ARCHITECTURE.md` system diagram — if adding hardware
+- `MEMORY.md` entity lists — if adding entities
+
+### Release Assembly
+
+After worktree PRs merge to main, a release session:
+
+1. Reads all `.changelog/` fragments
+2. Determines next version number
+3. Assembles CHANGELOG.md entry
+4. Updates all version numbers and history tables
+5. Deletes assembled fragments
+6. Tags, pushes, creates GitHub release
+
+Multiple worktree PRs can be batched into a single release.
+
 ### Merging
 
-Via `gh pr create` to `main`. Each worktree gets its own branch and version bump.
+Via `gh pr create` to `main`. Include the changelog fragment and any as-built entries in the PR.
 
 ## CHANGELOG Format
 
@@ -110,6 +156,9 @@ Use [Keep a Changelog](https://keepachangelog.com/):
 
 ### Fixed
 - Bug fixes
+
+### Discovered
+- New findings or issues identified
 
 ### Known Issues
 - Documented limitations

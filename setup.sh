@@ -35,6 +35,7 @@ while [[ $# -gt 0 ]]; do
       echo "  CHANGELOG.md                        Release history"
       echo "  docs/as-built.md                    Design decisions journal"
       echo "  docs/beliefs-and-tests.md           Investigation journal (with --investigations)"
+      echo "  .changelog/README.md                Changelog fragment format guide"
       echo "  .claude/settings.json               SessionStart hook config"
       echo "  .claude/hooks/context-recovery.sh   Context recovery script"
       echo "  .claude/worktree-prompt-template.md Worktree session template"
@@ -62,6 +63,7 @@ echo ""
 # Create directories
 mkdir -p "$PROJECT_DIR/docs"
 mkdir -p "$PROJECT_DIR/.claude/hooks"
+mkdir -p "$PROJECT_DIR/.changelog"
 
 # Helper: copy template with project name substitution
 copy_template() {
@@ -84,6 +86,7 @@ copy_template "$SCRIPT_DIR/templates/MEMORY.md" "$PROJECT_DIR/MEMORY.md"
 copy_template "$SCRIPT_DIR/templates/CHANGELOG.md" "$PROJECT_DIR/CHANGELOG.md"
 copy_template "$SCRIPT_DIR/templates/as-built.md" "$PROJECT_DIR/docs/as-built.md"
 copy_template "$SCRIPT_DIR/templates/worktree-prompt-template.md" "$PROJECT_DIR/.claude/worktree-prompt-template.md"
+copy_template "$SCRIPT_DIR/templates/changelog-readme.md" "$PROJECT_DIR/.changelog/README.md"
 
 # Optional: investigation journal
 if [[ "$INCLUDE_INVESTIGATIONS" == true ]]; then
