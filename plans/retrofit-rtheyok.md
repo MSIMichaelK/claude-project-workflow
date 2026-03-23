@@ -1,4 +1,6 @@
-# Retrofit: R They OK to Workflow Standard v1.1
+# Retrofit: R They OK to Workflow Standard v1.2
+
+**Status: COMPLETED** — 2026-03-23
 
 ## Value Case
 
@@ -45,27 +47,27 @@ RTheyOK is where the hard rules (never cycle, never guess, always verify) were b
 
 ### Phase 1: Infrastructure (one session)
 
-1. [ ] Create `.claude/settings.json` with SessionStart + PreToolUse hooks
-2. [ ] Create `.claude/hooks/` directory
-3. [ ] Create `.claude/hooks/context-recovery.sh` customised for RTheyOK
-4. [ ] Install `pre-commit-guard.sh` in `.claude/hooks/`
-5. [ ] Install `pre-pr-guard.sh` in `.claude/hooks/`
-6. [ ] Install `pre-release-guard.sh` in `.claude/hooks/`
-7. [ ] Create `.claude/workflow-mode` with `main`
-8. [ ] Create `.claude/context-files` (see proposed list below)
-9. [ ] Create `.claude/version-files` with both version file paths
-10. [ ] Create `.claude/release-artifacts` with `user-docs: false` (change to path at first user-facing release)
-11. [ ] Create `.changelog/` directory with `README.md`
-12. [ ] Create `MEMORY.md` — extract entity names, config values, key files from CLAUDE.md and ARCHITECTURE.md
-13. [ ] Add hard rules to CLAUDE.md — already present (originated here), verify completeness
-14. [ ] Verify pre-commit-guard with test commit
-15. [ ] Verify pre-release-guard with dry-run tag
+1. [x] Create `.claude/settings.json` with SessionStart + PreToolUse hooks
+2. [x] Create `.claude/hooks/` directory
+3. [x] Create `.claude/hooks/context-recovery.sh` customised for RTheyOK
+4. [x] Install `pre-commit-guard.sh` in `.claude/hooks/`
+5. [x] Install `pre-pr-guard.sh` in `.claude/hooks/`
+6. [x] Install `pre-release-guard.sh` in `.claude/hooks/`
+7. [x] Create `.claude/workflow-mode` with `main`
+8. [x] Create `.claude/context-files` (see proposed list below)
+9. [x] Create `.claude/version-files` with both version file paths
+10. [x] Create `.claude/release-artifacts` with `user-docs: false` (change to path at first user-facing release)
+11. [x] Create `.changelog/` directory with `README.md`
+12. [x] Create `MEMORY.md` — extract entity names, config values, key files from CLAUDE.md and ARCHITECTURE.md
+13. [x] Add hard rules to CLAUDE.md — already present (originated here), verify completeness
+14. [x] Verify pre-commit-guard with test commit
+15. [x] Verify pre-release-guard with dry-run tag
 
 ### Phase 2: Topic Skills (one session)
 
-16. [ ] Bootstrap topic skills using standard prompt
-17. [ ] Test auto-triggering of each skill
-18. [ ] Verify ha-addon skill surfaces all 5 findings
+16. [x] Bootstrap topic skills using standard prompt
+17. [x] Test auto-triggering of each skill
+18. [x] Verify ha-addon skill surfaces all 5 findings
 
 ### Decision: `as_built.md` naming
 

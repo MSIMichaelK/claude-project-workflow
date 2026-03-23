@@ -1,4 +1,6 @@
-# Retrofit: Edge Hunter (NRL) to Workflow Standard v1.1
+# Retrofit: Edge Hunter (NRL) to Workflow Standard v1.2
+
+**Status: COMPLETED** — 2026-03-23
 
 ## Value Case
 
@@ -42,37 +44,37 @@ NRL has the most mature codebase (~8,600 lines) and the most design decisions (6
 
 ### Phase 1: Infrastructure (one session)
 
-1. [ ] Create `.claude/workflow-mode` with `worktree`
-2. [ ] Create `.claude/context-files` (see proposed list below)
-3. [ ] Create `.claude/version-files` with `dashboard.py`
-4. [ ] Create `.claude/release-artifacts` with `user-docs: dashboard.py`
-5. [ ] Create `.changelog/` directory with `README.md`
-6. [ ] Install `pre-commit-guard.sh` in `.claude/hooks/`
-7. [ ] Install `pre-pr-guard.sh` in `.claude/hooks/`
-8. [ ] Install `pre-release-guard.sh` in `.claude/hooks/`
-9. [ ] Update `settings.json` to add PreToolUse hooks
-10. [ ] Update `context-recovery.sh` to read from `.claude/context-files`
-11. [ ] Create `docs/as-built.md` — extract implementation decisions from ARCHITECTURE.md that are AB-level, not ADR-level
-12. [ ] Create `docs/findings.md` — cron wrap, stake=0 crash, vote threshold timing
-13. [ ] Create `docs/assumptions.md` — surface from open issues
-14. [ ] Add hard rules to CLAUDE.md (never cycle, never guess, always verify)
-15. [ ] Verify pre-commit-guard coexists with git auto-version hook (test commit)
-16. [ ] Verify pre-release-guard with dry-run tag
+1. [x] Create `.claude/workflow-mode` with `worktree`
+2. [x] Create `.claude/context-files` (see proposed list below)
+3. [x] Create `.claude/version-files` with `dashboard.py`
+4. [x] Create `.claude/release-artifacts` with `user-docs: dashboard.py`
+5. [x] Create `.changelog/` directory with `README.md`
+6. [x] Install `pre-commit-guard.sh` in `.claude/hooks/`
+7. [x] Install `pre-pr-guard.sh` in `.claude/hooks/`
+8. [x] Install `pre-release-guard.sh` in `.claude/hooks/`
+9. [x] Update `settings.json` to add PreToolUse hooks
+10. [x] Update `context-recovery.sh` to read from `.claude/context-files`
+11. [x] Create `docs/as-built.md` — extract implementation decisions from ARCHITECTURE.md that are AB-level, not ADR-level
+12. [x] Create `docs/findings.md` — cron wrap, stake=0 crash, vote threshold timing
+13. [x] Create `docs/assumptions.md` — surface from open issues
+14. [x] Add hard rules to CLAUDE.md (never cycle, never guess, always verify)
+15. [x] Verify pre-commit-guard coexists with git auto-version hook (test commit)
+16. [x] Verify pre-release-guard with dry-run tag
 
 ### Phase 2: ADR Renumbering (one session)
 
-17. [ ] Read all 66 decisions in ARCHITECTURE.md
-18. [ ] Apply ADR test to each: "would reversing this require rearchitecting?"
-19. [ ] ADR-level decisions: renumber as ADR-001 through ADR-xxx
-20. [ ] AB-level decisions: move to docs/as-built.md as AB-001 through AB-xxx
-21. [ ] Verify no other files reference old decision numbers
-22. [ ] Update ARCHITECTURE.md version and date
+17. [x] Read all 66 decisions in ARCHITECTURE.md
+18. [x] Apply ADR test to each: "would reversing this require rearchitecting?"
+19. [x] ADR-level decisions: renumber as ADR-001 through ADR-xxx
+20. [x] AB-level decisions: move to docs/as-built.md as AB-001 through AB-xxx
+21. [x] Verify no other files reference old decision numbers
+22. [x] Update ARCHITECTURE.md version and date
 
 ### Phase 3: Topic Skills (one session)
 
-23. [ ] Bootstrap topic skills using standard prompt
-24. [ ] Test auto-triggering of each skill
-25. [ ] Verify skills reference correct ADR/AB numbers from Phase 2
+23. [x] Bootstrap topic skills using standard prompt
+24. [x] Test auto-triggering of each skill
+25. [x] Verify skills reference correct ADR/AB numbers from Phase 2
 
 ## Proposed `.claude/context-files`
 

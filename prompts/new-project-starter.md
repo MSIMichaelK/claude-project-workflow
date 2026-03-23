@@ -8,7 +8,7 @@
 ## Prompt
 
 ```
-Set up this project with the Claude workflow standard v1.1.
+Set up this project with the Claude workflow standard v1.2.
 
 Read the standard first:
   ~/Documents/GitHub/claude-project-workflow/standards/claude-workflow-standards-v3.md

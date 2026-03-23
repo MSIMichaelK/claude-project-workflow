@@ -1,4 +1,6 @@
-# Retrofit: HA_Home to Workflow Standard v1.1
+# Retrofit: HA_Home to Workflow Standard v1.2
+
+**Status: COMPLETED** — 2026-03-23
 
 ## Value Case
 
@@ -39,24 +41,24 @@ HA_Home has the strongest case for the standard's guard rails:
 
 ## Steps
 
-1. [ ] Create `.claude/workflow-mode` with `worktree`
-2. [ ] Create `.claude/context-files` (see proposed list below)
-3. [ ] Create `.claude/version-files` — identify all files containing version numbers
-4. [ ] Create `.claude/release-artifacts`
-5. [ ] Create `.changelog/` directory with `README.md`
-6. [ ] Install `pre-commit-guard.sh` in `.claude/hooks/`
-7. [ ] Install `pre-pr-guard.sh` in `.claude/hooks/`
-8. [ ] Install `pre-release-guard.sh` in `.claude/hooks/`
-9. [ ] Update `settings.json` to add PreToolUse hooks
-10. [ ] Update `context-recovery.sh` to read from `.claude/context-files` instead of hardcoded list
-11. [ ] Create `docs/findings.md` — extract operational gotchas from CLAUDE.md and as-built.md
-12. [ ] Create `docs/assumptions.md` — surface unverified items from CLAUDE.md, open issues
-13. [ ] Add hard rules to CLAUDE.md (never cycle, never guess, always verify)
-14. [ ] Bootstrap topic skills (separate session — use bootstrap prompt)
-15. [ ] Test auto-triggering of each skill
-16. [ ] Verify pre-commit-guard with test commit on main (should block)
-17. [ ] Verify pre-commit-guard with test commit in worktree (should pass with fragment + issue)
-18. [ ] Verify pre-release-guard with dry-run tag
+1. [x] Create `.claude/workflow-mode` with `worktree`
+2. [x] Create `.claude/context-files` (see proposed list below)
+3. [x] Create `.claude/version-files` — identify all files containing version numbers
+4. [x] Create `.claude/release-artifacts`
+5. [x] Create `.changelog/` directory with `README.md`
+6. [x] Install `pre-commit-guard.sh` in `.claude/hooks/`
+7. [x] Install `pre-pr-guard.sh` in `.claude/hooks/`
+8. [x] Install `pre-release-guard.sh` in `.claude/hooks/`
+9. [x] Update `settings.json` to add PreToolUse hooks
+10. [x] Update `context-recovery.sh` to read from `.claude/context-files` instead of hardcoded list
+11. [x] Create `docs/findings.md` — extract operational gotchas from CLAUDE.md and as-built.md
+12. [x] Create `docs/assumptions.md` — surface unverified items from CLAUDE.md, open issues
+13. [x] Add hard rules to CLAUDE.md (never cycle, never guess, always verify)
+14. [x] Bootstrap topic skills (separate session — use bootstrap prompt)
+15. [x] Test auto-triggering of each skill
+16. [x] Verify pre-commit-guard with test commit on main (should block)
+17. [x] Verify pre-commit-guard with test commit in worktree (should pass with fragment + issue)
+18. [x] Verify pre-release-guard with dry-run tag
 
 ## Proposed `.claude/context-files`
 

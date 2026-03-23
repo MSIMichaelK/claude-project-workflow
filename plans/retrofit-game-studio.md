@@ -1,5 +1,7 @@
 # Retrofit: Thunkit Factory (Game Studio) to Workflow Standard v1.2
 
+**Status: COMPLETED** — 2026-03-23
+
 ## Project Overview
 
 Thunkit Factory is a simulated game development studio giving Millie (junior artist) real-world production experience. Unlike the other four projects, this one has:
@@ -67,38 +69,38 @@ The standard needs a **multi-persona extension** for this project.
 
 ### Phase 1: Foundation (this session or next)
 
-1. [ ] Correct CLAUDE.md — Dad is Game Designer, not Claude. Claude fills Susi + Alex only.
-2. [ ] Create `MEMORY.md` — user IDs, token locations, browser profile mapping, API quirks, key file paths
-3. [ ] Create `CHANGELOG.md` — retroactive entries from 5 existing commits
-4. [ ] Create `.claude/workflow-mode` with `main` (no worktree enforcement needed yet)
-5. [ ] Create `.claude/context-files` (see proposed list below)
-6. [ ] Create `.claude/settings.json` with SessionStart + PreToolUse hooks
-7. [ ] Create `.claude/hooks/context-recovery.sh` — reads context-files, checks Codecks connectivity, checks `_TO_UNREAL/`
-8. [ ] Create `.claude/hooks/pre-commit-guard.sh`
-9. [ ] Create `.claude/hooks/pre-pr-guard.sh`
-10. [ ] Create `.claude/hooks/pre-release-guard.sh`
-11. [ ] Create `.changelog/README.md`
-12. [ ] Clean up `settings.local.json` — remove stale curl permissions from debugging
+1. [x] Correct CLAUDE.md — Dad is Game Designer, not Claude. Claude fills Susi + Alex only.
+2. [x] Create `MEMORY.md` — user IDs, token locations, browser profile mapping, API quirks, key file paths
+3. [x] Create `CHANGELOG.md` — retroactive entries from 5 existing commits
+4. [x] Create `.claude/workflow-mode` with `main` (no worktree enforcement needed yet)
+5. [x] Create `.claude/context-files` (see proposed list below)
+6. [x] Create `.claude/settings.json` with SessionStart + PreToolUse hooks
+7. [x] Create `.claude/hooks/context-recovery.sh` — reads context-files, checks Codecks connectivity, checks `_TO_UNREAL/`
+8. [x] Create `.claude/hooks/pre-commit-guard.sh`
+9. [x] Create `.claude/hooks/pre-pr-guard.sh`
+10. [x] Create `.claude/hooks/pre-release-guard.sh`
+11. [x] Create `.changelog/README.md`
+12. [x] Clean up `settings.local.json` — remove stale curl permissions from debugging
 
 ### Phase 2: Knowledge Structure
 
-13. [ ] Rename `DESIGN_DECISIONS.md` to follow standard — DD-xxx is fine (keep existing numbering)
-14. [ ] Create `docs/findings.md` — extract from ARCHITECTURE.md (DD-009 comment API limitation is a finding, not a decision)
-15. [ ] Create `docs/assumptions.md` — e.g., "Git LFS not yet configured — assuming binary assets stay small for now"
-16. [ ] Move ARCHITECTURE.md to root or create root-level pointer (standard expects root ARCHITECTURE.md)
+13. [x] Rename `DESIGN_DECISIONS.md` to follow standard — DD-xxx is fine (keep existing numbering)
+14. [x] Create `docs/findings.md` — extract from ARCHITECTURE.md (DD-009 comment API limitation is a finding, not a decision)
+15. [x] Create `docs/assumptions.md` — e.g., "Git LFS not yet configured — assuming binary assets stay small for now"
+16. [x] Move ARCHITECTURE.md to root or create root-level pointer (standard expects root ARCHITECTURE.md)
 
 ### Phase 3: Topic Skills (separate session)
 
-17. [ ] Bootstrap topic skills using standard prompt (see proposed skills below)
-18. [ ] Test auto-triggering — give an art review task without mentioning the skill
-19. [ ] Test auto-triggering — give an engineering task without mentioning the skill
-20. [ ] Verify role switching works correctly with skill-loaded context
+17. [x] Bootstrap topic skills using standard prompt (see proposed skills below)
+18. [x] Test auto-triggering — give an art review task without mentioning the skill
+19. [x] Test auto-triggering — give an engineering task without mentioning the skill
+20. [x] Verify role switching works correctly with skill-loaded context
 
 ### Phase 4: Multi-Persona Extension
 
-21. [ ] Add `studio-mode` section to CLAUDE.md or as a skill — documents role-action mapping
-22. [ ] Create a `codecks-ops.md` skill that includes token refresh procedure, browser profile mapping, and API limitations
-23. [ ] Test: start fresh session, ask to review Millie's art — should load art-direction skill, post as Susi
+21. [x] Add `studio-mode` section to CLAUDE.md or as a skill — documents role-action mapping
+22. [x] Create a `codecks-ops.md` skill that includes token refresh procedure, browser profile mapping, and API limitations
+23. [x] Test: start fresh session, ask to review Millie's art — should load art-direction skill, post as Susi
 
 ## Proposed `.claude/context-files`
 

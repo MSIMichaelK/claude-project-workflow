@@ -8,7 +8,7 @@
 ## Prompt
 
 ```
-Retrofit this project to the Claude workflow standard v1.1.
+Retrofit this project to the Claude workflow standard v1.2.
 
 Read these in order:
 1. ~/Documents/GitHub/claude-project-workflow/standards/claude-workflow-standards-v3.md
