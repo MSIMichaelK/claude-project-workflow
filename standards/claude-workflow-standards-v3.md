@@ -791,92 +791,69 @@ Exit codes: `0` = allow, `2` = block with message.
 
 ### SessionStart: `context-recovery.sh`
 
-**Purpose:** Enforce Tier 2 loading from `.claude/context-files`. Display branch status. Surface operational standing rules. Hint at Tier 3 skill from branch name.
+**Purpose:** Force Tier 2 loading from `.claude/context-files`. The proof gate at the end creates a hard expectation that Claude's first response is the checklist, not task work.
 
-**Customise per project:** incidents list, standing rules, environment reminders, context-files list.
+**Design principle:** Keep output under 20 lines. Every extra line of banner reduces compliance. The proof gate is the critical line — everything else is supporting context.
+
+**Customise per project:** context-files list, production warnings, skill hint logic.
 
 ```bash
 #!/bin/bash
 TRIGGER="${SESSION_TRIGGER:-startup}"
 MODE=$(cat .claude/workflow-mode 2>/dev/null || echo "worktree")
+PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null)}"
 
-cat << 'EOF'
-+==============================================================+
-|           TIER 2 CONTEXT LOADING — DO NOT SKIP                |
-+==============================================================+
-EOF
-
-echo "Trigger: $TRIGGER | Mode: $MODE"
+echo "CONTEXT RECOVERY | Trigger: $TRIGGER | Mode: $MODE | Branch: $(git branch --show-current 2>/dev/null || echo detached)"
+echo ""
+echo "STOP. Read these files NOW before doing anything else:"
 echo ""
 
 # -- Tier 2: read context-files list -------------------------------------------
-if [ -f ".claude/context-files" ]; then
-  echo "Read ALL of the following before doing any work:"
-  echo ""
+if [ -f "$PROJECT_DIR/.claude/context-files" ]; then
+  i=1
   while IFS= read -r line || [ -n "$line" ]; do
     [ -z "$line" ] && continue
     [ "${line:0:1}" = "#" ] && continue
     if [ "$line" = "gh-issues" ]; then
-      echo "  - gh issue list --state open --limit 50"
+      echo "  $i. gh issue list --state open --limit 50"
     else
-      echo "  - $line"
+      echo "  $i. $line"
     fi
-  done < ".claude/context-files"
+    i=$((i+1))
+  done < "$PROJECT_DIR/.claude/context-files"
 else
-  echo "Read ALL of the following before doing any work:"
-  echo ""
-  echo "  1. ARCHITECTURE.md    — system map, ADR decisions"
-  echo "  2. MEMORY.md          — entity names, config values, key files"
+  echo "  1. ARCHITECTURE.md"
+  echo "  2. MEMORY.md"
   echo "  3. gh issue list --state open --limit 50"
 fi
 
 echo ""
-echo "Post Tier 2 proof checklist with one fact from each file."
-echo ""
-
-# -- Branch status --------------------------------------------------------------
-echo "Current branch:"
-git branch --show-current 2>/dev/null || echo "  (not in a git repo)"
-echo ""
-echo "Active branches with unpushed work:"
-git branch -v 2>/dev/null | head -10 || true
-echo ""
 
 # -- Tier 3 hint from branch name ----------------------------------------------
 branch=$(git branch --show-current 2>/dev/null || echo "")
-if [ -d ".claude/skills" ] && [ -n "$branch" ] && [ "$branch" != "main" ]; then
+if [ -d "$PROJECT_DIR/.claude/skills" ] && [ -n "$branch" ] && [ "$branch" != "main" ]; then
   branch_words=$(echo "$branch" | tr '-' '\n' | tr '_' '\n')
-  for skill in .claude/skills/*.md; do
+  for skill in "$PROJECT_DIR"/.claude/skills/*.md; do
     [ -f "$skill" ] || continue
-    skill_name=$(basename "$skill" .md)
     for word in $branch_words; do
       [ ${#word} -lt 4 ] && continue
       if grep -qi "$word" "$skill" 2>/dev/null; then
-        echo "Suggested Tier 3 skill for this branch: $skill"
+        echo "Then load skill: $(basename "$skill")"
         break 2
       fi
     done
   done
-  echo ""
 fi
 
-# -- Standing rules (customise per project) ------------------------------------
-echo "------------------------------------------------------------"
-echo "STANDING RULES:"
-echo "  # ADD PROJECT-SPECIFIC OPERATIONAL RULES HERE"
-echo "------------------------------------------------------------"
-echo ""
-echo "PAST FAILURES (why this matters):"
-echo "  # CUSTOMISE THESE PER PROJECT"
-echo "------------------------------------------------------------"
-echo ""
-
+# -- Compaction warning ---------------------------------------------------------
 if [ "$TRIGGER" = "compact" ]; then
-  echo "WARNING: Context was compacted. CLAUDE.md was re-injected automatically."
-  echo "    Still re-read Tier 2 files listed above."
-  echo "    Re-load Tier 3 skill for whatever task was in progress."
   echo ""
+  echo "WARNING: Context was compacted. Re-read all files above. Re-load your task's skill."
 fi
+
+# -- Proof gate (CRITICAL — this is what forces compliance) ---------------------
+echo ""
+echo "YOUR FIRST RESPONSE must be the proof checklist. One fact per file. Do not work on any task until proof is posted."
 
 exit 0
 ```
