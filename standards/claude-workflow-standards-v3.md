@@ -1,11 +1,20 @@
 # Claude Project Workflow Standards
-**Version:** 1.1 — 2026-03-21
+**Version:** 1.2 — 2026-03-23
 
 > Deterministic enforcement of context loading, issue discipline, and release integrity across Claude Code projects. Derived from patterns across HA_Home, Scores4Streams V2, Edge Hunter (NRL), and R They OK.
 
 ---
 
 ## Standard Changelog
+
+### 1.2 — 2026-03-23 (post-retrofit learnings)
+- All four projects retrofitted and verified (Scores4S, HA_Home, NRL, RTheyOK)
+- Skill count guidance changed: "start with 3-6, split if needed" (actual: 4-9 across projects)
+- ADR/AB renumbering no longer required for existing projects — keep existing schemes
+- Roadmap added as optional Tier 2 file (validated by RTheyOK)
+- `0-chore-` fragment prefix documented as standard pattern (validated by RTheyOK bootstrap)
+- Projects table updated with actual skill counts and context weights
+- Existing sessions don't pick up new hooks — must start fresh after retrofit
 
 ### 1.1 — 2026-03-21
 - Configurable Tier 2 via `.claude/context-files` — each project declares its own session-start file list
@@ -109,7 +118,8 @@ gh-issues
 1. Start with the default three: `ARCHITECTURE.md`, `MEMORY.md`, `gh-issues`
 2. Ask: "Which files, if skipped, have caused or would cause regressions?"
 3. Add those files. Be honest — if the project is complex, the list will be longer.
-4. Document *why* each non-default file is included (comment in the file)
+4. Consider `docs/roadmap.md` if milestone awareness affects task prioritisation
+5. Document *why* each non-default file is included (comment in the file)
 
 **Iterating:**
 - When an incident occurs because Claude didn't have context from a file → add it to context-files
@@ -225,6 +235,8 @@ Decisions about how something was implemented *within* the architecture — thin
 
 Both reference the GitHub issue where the full design discussion and rejected alternatives live.
 
+**Existing project numbering:** Projects that predate this standard keep their existing numbering schemes (e.g. D1-D55 in RTheyOK, inline numbers in NRL). Use ADR-xxx/AB-xxx prefixes for new projects only.
+
 ### ADR Entry Format
 
 ```markdown
@@ -270,10 +282,6 @@ handles them. Full design discussion including rejected alternatives in #67.
 
 **Issue:** #67 | **Release:** v2.1.0
 ```
-
-### Migration Note: NRL ARCHITECTURE.md
-
-NRL's ARCHITECTURE.md contains 66 design decisions currently labelled generically. These should be renumbered as ADR-xxx to formalise the notation. This is a one-session task — find/replace numbering, verify nothing references old numbers.
 
 ---
 
@@ -1381,9 +1389,9 @@ Revisit if you have genuinely interdependent parallel workstreams where two agen
 
 ## Projects Using This Workflow
 
-| Project | Mode | Workflow version | Topic skills | User docs | Notes |
-|---------|------|-----------------|-------------|-----------|-------|
-| HA_Home | `worktree` | 1.1 | energy, alarm, pool-solar, dashboard | Not yet | Heavy Tier 2 (8 files), beliefs-and-tests + energy-investigation |
-| Scores4Streams V2 | `main` | 1.1 | batting-engine, data-model, scoring-modes, undo | Deferred — UI iterating | Worktrees discouraged (project-specific) |
-| Edge Hunter (NRL) | `worktree` | 1.1 | betting-model, odds-pipeline, deployment, ui-voting | Help tab active | ADR renumbering pending |
-| R They OK | `main` | 1.1 | baseline-engine, ha-addon, sensor-pairing, deployment | Needed — users arriving soon | findings.md + assumptions.md most mature |
+| Project | Mode | Version | Skills | Context weight | Status |
+|---------|------|---------|--------|---------------|--------|
+| HA_Home | `worktree` | 1.2 | 7 (cameras-frigate, dashboard-kiosk, energy-system, network-infra, pir-lighting, pool-heating, release-workflow) | Heavy | Retrofitted ✓ — PR #182, v0.4.34 |
+| Scores4Streams V2 | `main` | 1.2 | 8 | Medium | Retrofitted ✓ — guards verified in live session |
+| Edge Hunter (NRL) | `worktree` | 1.2 | 9 (betting-workflow, collaboration, dashboard-ui, deployment, help-guide, model-engine, multi-sport, multi-tenant, notifications) | Medium | Retrofitted ✓ — rebrand branch rebased |
+| R They OK | `main` | 1.2 | 4 (baseline-engine, ha-addon, sensor-pairing, deployment) | Light | Retrofitted ✓ — backlog + roadmap done |
