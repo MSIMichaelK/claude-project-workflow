@@ -10,8 +10,7 @@
 ## Status
 
 **Standard version:** 1.2 (2026-03-23)
-**All four projects retrofitted:** HA_Home ✓, Scores4Streams ✓, NRL ✓, RTheyOK ✓
-**Pending:** Game studio project (new, multi-persona — may need standard extension)
+**All five projects retrofitted:** HA_Home ✓, Scores4Streams ✓, NRL ✓, RTheyOK ✓, Game Studio ✓
 
 ---
 
@@ -127,6 +126,11 @@
 - **Hooks:** SessionStart ✓, pre-commit-guard ✓, pre-pr-guard ✓, pre-release-guard ✓
 - **Tested:** Backlog and roadmap session completed under new workflow
 
+### The Kronk Game Studio — Retrofitted ✓
+- **Mode:** main | **Context weight:** Medium | **Multi-persona:** Susi (Art Director) + Alex (Lead Dev)
+- **Hooks:** SessionStart ✓, pre-commit-guard ✓, pre-pr-guard ✓, pre-release-guard ✓
+- **Note:** Dad (Kronky) is Game Designer — Claude fills Susi + Alex only. Codecks MCP integration for project management.
+
 ---
 
 ## Retrofit Learnings
@@ -142,7 +146,7 @@
 
 ## Known Issues and Future Work
 
-1. **Game studio project** — multi-persona simulation (art director + dev) may need a standard extension
+1. **Game studio multi-persona** — standard extension may be needed as complexity grows
 2. **Skill auto-triggering** — untested at scale across all projects
 3. **Compaction resilience** — untested. Does re-loading skill pointers after compaction preserve enough context?
 4. **HA_Home Tier 2 optimisation** — slim summary needed, full ARCHITECTURE.md to Tier 3
