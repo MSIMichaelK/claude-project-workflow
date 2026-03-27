@@ -18,6 +18,12 @@
 
 set -euo pipefail
 
+# ── Early exit: only intercept git tag commands ───────────────────────────────
+_input=$(cat)
+_command=$(echo "$_input" | python3 -c \
+  "import sys,json; print(json.load(sys.stdin).get('command',''))" 2>/dev/null || echo "")
+if [[ "$_command" != *"git tag"* ]]; then exit 0; fi
+
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null)}"
 ERRORS=0
 WARNINGS=0
