@@ -4,10 +4,10 @@
 
 ## Project Overview
 
-Thunkit Factory is a simulated game development studio giving Millie (junior artist) real-world production experience. Unlike the other four projects, this one has:
+Thunkit Factory is a simulated game development studio giving [artist] (junior artist) real-world production experience. Unlike the other four projects, this one has:
 
 - **Two AI personas** (Susi/Art Director, Alex/Lead Dev) posting to Codecks as separate users
-- **An external human team member** (Millie) who interacts only through Codecks and GitHub Desktop
+- **An external human team member** ([artist]) who interacts only through Codecks and GitHub Desktop
 - **A browser fallback requirement** — Codecks API can write comments but can't read them
 - **Three tokens** that expire independently and require manual browser refresh per-profile
 
@@ -17,12 +17,12 @@ The standard needs a **multi-persona extension** for this project.
 
 | Role | Who | Codecks Account | How |
 |------|-----|----------------|-----|
-| Producer + Game Designer | Dad (Kronky) | Kronky | Direct — decides scope, priorities, design |
+| Producer + Game Designer | [producer] | [producer-username] | Direct — decides scope, priorities, design |
 | Art Director | Claude AI | Susi | `role: "susi"` — briefs, reviews, feedback |
 | Lead Dev | Claude AI | Alex | `role: "alex"` — engineering cards, integration |
-| Artist | Millie | d0lly_x | Codecks + art tools only, never Claude Code |
+| Artist | [artist] | [artist-username] | Codecks + art tools only, never Claude Code |
 
-**Note:** CLAUDE.md currently lists Game Designer as a Claude role. This should be corrected — Dad is the Game Designer. Claude executes design decisions, doesn't make them.
+**Note:** CLAUDE.md currently lists Game Designer as a Claude role. This should be corrected — [producer] is the Game Designer. Claude executes design decisions, doesn't make them.
 
 ## Value Case
 
@@ -30,7 +30,7 @@ The standard needs a **multi-persona extension** for this project.
 - **Token amnesia** — after compaction, Claude forgets which browser profile maps to which token. A skill fixes this.
 - **Role confusion** — posting as the wrong persona (Susi posting engineering cards, Alex giving art feedback). A skill with explicit role-action mapping prevents this.
 - **Cold starts** — every session currently starts from scratch. SessionStart hook prints board state, `_TO_UNREAL/` status, and token health.
-- **Millie getting inconsistent feedback** — if Claude forgets the feedback principles (lead with what works, be objective, push for rough-ins), Millie gets confusing direction. A skill ensures the art-direction context is loaded for every review.
+- **[artist] getting inconsistent feedback** — if Claude forgets the feedback principles (lead with what works, be objective, push for rough-ins), [artist] gets confusing direction. A skill ensures the art-direction context is loaded for every review.
 - **Lost design decisions** — DD-001 to DD-009 exist but nothing enforces reading them. They're already in ADR-like format.
 
 ### What the standard adds
@@ -69,7 +69,7 @@ The standard needs a **multi-persona extension** for this project.
 
 ### Phase 1: Foundation (this session or next)
 
-1. [x] Correct CLAUDE.md — Dad is Game Designer, not Claude. Claude fills Susi + Alex only.
+1. [x] Correct CLAUDE.md — [producer] is Game Designer, not Claude. Claude fills Susi + Alex only.
 2. [x] Create `MEMORY.md` — user IDs, token locations, browser profile mapping, API quirks, key file paths
 3. [x] Create `CHANGELOG.md` — retroactive entries from 5 existing commits
 4. [x] Create `.claude/workflow-mode` with `main` (no worktree enforcement needed yet)
@@ -100,7 +100,7 @@ The standard needs a **multi-persona extension** for this project.
 
 21. [x] Add `studio-mode` section to CLAUDE.md or as a skill — documents role-action mapping
 22. [x] Create a `codecks-ops.md` skill that includes token refresh procedure, browser profile mapping, and API limitations
-23. [x] Test: start fresh session, ask to review Millie's art — should load art-direction skill, post as Susi
+23. [x] Test: start fresh session, ask to review [artist]'s art — should load art-direction skill, post as Susi
 
 ## Proposed `.claude/context-files`
 
@@ -114,7 +114,7 @@ gh issue list --state open --limit 20
 ```
 
 **Why these 4:**
-- CLAUDE.md — roles, Millie's profile, card format, communication style (essential every session)
+- CLAUDE.md — roles, [artist]'s profile, card format, communication style (essential every session)
 - MEMORY.md — IDs, tokens, paths (lookup table, prevents guessing)
 - ARCHITECTURE.md — system components, API capabilities, data flow
 - gh issues — what's in flight
@@ -129,10 +129,10 @@ gh issue list --state open --limit 20
 
 | Skill | Key Context | Auto-trigger Keywords |
 |-------|------------|----------------------|
-| `art-direction.md` | MILLIE_BRIEF.md, DD-003, DD-006, DD-008, feedback principles, pipeline gates, style guide status, current art cards | review, art, Millie, brief, feedback, Susi, blockout, concept, texture, asset, Island, style guide, portfolio |
+| `art-direction.md` | MILLIE_BRIEF.md, DD-003, DD-006, DD-008, feedback principles, pipeline gates, style guide status, current art cards | review, art, [artist], brief, feedback, Susi, blockout, concept, texture, asset, Island, style guide, portfolio |
 | `codecks-ops.md` | Token management, browser profiles, API capabilities/limits, role switching, DD-002, DD-004, DD-009 | Codecks, card, token, 401, 403, Susi post, Alex post, role, API, comment, conversation, board |
 | `engineering.md` | UE5 setup status, asset integration path, _TO_UNREAL mailbox, file naming conventions, DD-001, DD-007 | Unreal, UE5, Blueprint, C++, import, integrate, FBX, collision, LOD, _TO_UNREAL |
-| `game-design.md` | GAME_CONCEPT.md, DD-003 (style from Millie), DD-005 (tool decisions are hers), DD-006 (smaller tasks), island breakdown | Sky Lands, island, feature, gameplay, design, scope, concept, level |
+| `game-design.md` | GAME_CONCEPT.md, DD-003 (style from [artist]), DD-005 (tool decisions are hers), DD-006 (smaller tasks), island breakdown | Sky Lands, island, feature, gameplay, design, scope, concept, level |
 
 ## Multi-Persona Extension (Standard Addition)
 
@@ -147,15 +147,15 @@ This is new territory for the workflow standard. The pattern:
 | Art review / feedback | Susi | Art Director reviews deliverables |
 | Engineering card | Alex | Lead Dev owns technical tasks |
 | Integration update | Alex | Lead Dev does the integration |
-| Design decision | Kronky (Dad) | Producer/Designer decides scope |
-| Card assignment to Millie | Susi | Art Director assigns art work |
-| Board management | Kronky | Producer manages the board |
+| Design decision | [producer] | Producer/Designer decides scope |
+| Card assignment to [artist] | Susi | Art Director assigns art work |
+| Board management | [producer] | Producer manages the board |
 ```
 
 ### Token Health Check (goes in context-recovery.sh)
 
 The SessionStart hook should attempt a lightweight Codecks API call (e.g., list projects) and report:
-- Kronky token: OK / EXPIRED
+- [producer] token: OK / EXPIRED
 - Susi token: OK / EXPIRED
 - Alex token: OK / EXPIRED
 
@@ -163,10 +163,10 @@ If any token is expired, print the refresh procedure before allowing work to pro
 
 ### Browser Fallback Protocol
 
-When Claude needs to read Millie's comments:
+When Claude needs to read [artist]'s comments:
 1. Use Chrome MCP to navigate to the card URL
 2. Read the conversation thread
-3. Summarise what Millie said
+3. Summarise what [artist] said
 4. Respond as appropriate persona via API
 
 This should be documented in the codecks-ops skill.
@@ -179,12 +179,12 @@ This should be documented in the codecks-ops skill.
 | settings.local.json curl permissions conflict with new settings.json | Clean up stale permissions in Phase 1 step 12 |
 | ARCHITECTURE.md not at root level | Create root-level pointer or move it. Standard expects root ARCHITECTURE.md for Tier 2 loading. |
 | Codecks MCP server not running | SessionStart hook should detect and warn, not block |
-| Millie sees AI-generated content in repo | CLAUDE.md, skills, hooks are in `.claude/` (gitignored by default). Review `.gitignore` to confirm. |
+| [artist] sees AI-generated content in repo | CLAUDE.md, skills, hooks are in `.claude/` (gitignored by default). Review `.gitignore` to confirm. |
 | Chrome MCP not available in all sessions | codecks-ops skill documents fallback: ask Dad to copy-paste comment text |
 
 ## What This Does NOT Change
 
-- Millie's workflow — she still uses only Codecks, GitHub Desktop, and her art tools
+- [artist]'s workflow — she still uses only Codecks, GitHub Desktop, and her art tools
 - The art pipeline — 10 steps with blockout hard gate stays as-is
 - Codecks board structure — decks, journeys, spaces stay as configured
 - The studio simulation — Susi and Alex remain the two AI personas

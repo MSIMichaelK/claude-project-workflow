@@ -1,11 +1,24 @@
 # Claude Project Workflow Standards
-**Version:** 1.2 — 2026-03-23
+**Version:** 1.3 — 2026-03-27
 
-> Deterministic enforcement of context loading, issue discipline, and release integrity across Claude Code projects. Derived from patterns across HA_Home, Scores4Streams V2, Edge Hunter (NRL), and R They OK.
+> Deterministic enforcement of context loading, issue discipline, and release integrity across Claude Code projects. Derived from patterns across HA_Home, Scores4Streams V2, Edge Hunter (NRL), R They OK, and Thunkit Factory.
 
 ---
 
 ## Standard Changelog
+
+### 1.3 — 2026-03-27 (issue hierarchy + planning flow)
+- Issue hierarchy introduced: epic, story, spike, investigation, bug, chore — each with a GitHub issue template
+- Six issue templates added to `templates/github/ISSUE_TEMPLATE/`
+- Process skills introduced: BA Analyst, PM, Scrum Master — copied to every project as `process-*.md`
+- Greenfield planning flow formalised: concept doc → spike(s) → prototype → PRD → epics → stories
+- `docs/concept.md` template added — initial project concept, written once, not updated
+- `docs/spikes/` convention added — output location for substantial spike explorations
+- Pre-release-guard updated: accepts a list of issue numbers, checks each is closed with retirement checklist complete
+- `setup.sh` updated: creates `.github/ISSUE_TEMPLATE/`, `docs/spikes/`, `.claude/skills/`; copies issue templates and process skills
+- Retrofit prompt updated: Prompt A (first-time) and Prompt B (v1.2 → v1.3 update)
+- README.md added — public-facing overview with BMAD attribution
+- BMAD attribution: process skills and greenfield planning flow inspired by BMAD Method (Brian Goff)
 
 ### 1.2 — 2026-03-23 (post-retrofit learnings)
 - All four projects retrofitted and verified (Scores4S, HA_Home, NRL, RTheyOK)
@@ -550,6 +563,165 @@ Never bare `gh issue close N`. Before closing, post a structured comment:
 This makes `gh issue view N` a complete lifecycle record. Closed issues become queryable context for future sessions without cross-referencing multiple docs.
 
 The release script handles this automatically for each closed issue.
+
+---
+
+## Issue Hierarchy
+
+Work is structured in six issue types. Each has a GitHub issue template in `.github/ISSUE_TEMPLATE/`.
+
+### The Six Types
+
+| Type | Purpose | Release unit? | Closes when |
+|---|---|---|---|
+| **Epic** | Strategic container for a capability — spans multiple sprints | No | All child stories delivered |
+| **Story** | Single unit of independently releasable work | Yes — primary unit | Retirement checklist complete |
+| **Spike** | Time-boxed exploration to answer a specific question | No — produces output | Question answered, output documented |
+| **Investigation** | Open-ended problem exploration, anchors to findings.md | No | Root cause found or accepted |
+| **Bug** | Something is broken | Yes | Fixed, retirement checklist complete |
+| **Chore** | Maintenance — no user-facing value | Patch only | Done |
+
+### Epic → Story Relationship
+
+Use `- [ ] #number Story title` format in the epic's Stories section. GitHub automatically checks the item when the referenced issue closes. No hook or manual maintenance required.
+
+```markdown
+## Stories
+- [ ] #88 Undo stack data model
+- [ ] #89 Wire undo to scoring actions
+- [x] #90 Add redo support           ← auto-checked when #90 closed
+```
+
+When creating a new story under an epic: add it to the epic's Stories checklist immediately after the issue is created.
+
+### Release Model
+
+A release is an **explicit curation decision** — not automatic at any hierarchy level.
+
+- A release can include one story (hot fix), a subset of an epic's stories, all stories in an epic, or stories from multiple epics
+- Minor/major releases typically advance one or more epics
+- Patch releases can stand alone without an epic
+- Epic completion does not trigger a release — you decide when to release
+
+The pre-release-guard (v1.3+) accepts a list of story and bug issue numbers. Each must be closed with retirement checklist complete.
+
+```bash
+bash .claude/hooks/pre-release-guard.sh 88 89 90 91
+```
+
+### Story Retirement Checklist
+
+Every story and bug issue must complete this checklist before closing:
+
+- [ ] Non-obvious implementation decisions added to as-built.md
+- [ ] New regression risks added to relevant skill
+- [ ] CHANGELOG fragment written
+
+This is the knowledge migration step — it moves durable knowledge out of the transient issue and into the permanent knowledge base. If skipped, the knowledge is buried in closed issue history and skills don't evolve.
+
+### When to Use Each Type
+
+**Epic** — when a feature is too large for one session and will produce multiple PRs. If it takes more than a day, it's probably an epic.
+
+**Story** — default for all feature work. One session to a few sessions, one PR, independently testable.
+
+**Spike** — when you don't know how to build something yet. The question must be specific and answerable. If the time box expires without an answer, document what was learned and open follow-on spikes or stories.
+
+**Investigation** — when something is broken or behaving unexpectedly and the cause isn't clear. No time box. Findings accumulate in findings.md. Closes when root cause is understood.
+
+**Bug** — when behaviour is wrong and the expected behaviour is clear. Distinct from investigation: the problem is understood, the fix is the work.
+
+**Chore** — dependency updates, refactors, CI fixes. No user-facing value. `chore/` branch bypasses issue requirement in pre-commit-guard.
+
+---
+
+## Greenfield Planning Flow
+
+For new projects, run this sequence before setup.sh and before writing production code:
+
+```
+1. Concept doc (docs/concept.md)
+   Capture the idea, target users, rough scope, explicit out-of-scope, constraints, open questions.
+   Load process-ba-analyst skill to guide this session.
+   This document is written once and not updated — deviations become ADRs.
+
+2. Spike(s)
+   Open a spike issue for each open question in concept.md.
+   Quick finding → findings.md as F-xxx entry
+   Substantial approach → docs/spikes/<issue-number>-<slug>.md
+   Spike is complete when the question is answered, even if the answer is "no".
+
+3. Prototype (optional)
+   Rough build to prove spike findings hold at scale.
+   Not production code — used to validate approach before committing to architecture.
+
+4. PRD (docs/requirements.md)
+   Written after spikes, not before. PRD informed by spike findings is accurate.
+   PRD written in a vacuum is fiction.
+   Load process-product-manager skill to guide this session.
+
+5. Epics and stories
+   Translate PRD features into GitHub epics and stories.
+   Load process-scrum-master skill to break epics into well-formed stories.
+
+6. setup.sh → normal workflow
+```
+
+For brownfield projects (existing codebase), skip to step 5 or 6 depending on how much planning has already been done informally.
+
+### docs/concept.md
+
+Written at project start, before any technical work. Not updated as the project evolves — deviations are captured as ADRs in ARCHITECTURE.md.
+
+Template at `templates/concept.md`. Sections: The Idea, Target Users, Rough Scope, Explicitly Out of Scope, Key Constraints, Open Questions, Related.
+
+### docs/spikes/ Convention
+
+Spike outputs for substantial explorations live in `docs/spikes/<issue-number>-<slug>.md`. Not loaded in any tier. Grep-able when starting similar future spikes.
+
+| Spike type | Output location |
+|---|---|
+| Quick (< 1 session) | `findings.md` as F-xxx entry |
+| Substantial approach exploration | `docs/spikes/<issue-number>-<slug>.md` |
+| Produces an architecture decision | Input to ADR in ARCHITECTURE.md — spike doc retired |
+| Project-start approach | `docs/concept.md` |
+
+---
+
+## Process Skills
+
+Process skills are a distinct category from domain (topic) skills. They tell Claude how to approach a type of work rather than what to know about a domain. Every project receives all three process skills via setup.sh.
+
+### Process vs Domain Skills
+
+| | Domain skill | Process skill |
+|---|---|---|
+| **Scope** | Project-specific domain knowledge | Universal workflow knowledge |
+| **Examples** | `batting-engine.md`, `ha-addon.md` | `process-ba-analyst.md` |
+| **Content** | ADR/AB pointers, regression risks, findings | Persona, process, output format, anti-patterns |
+| **When loaded** | When working in that domain | When doing planning or requirements work |
+| **Naming** | `<domain>.md` | `process-<role>.md` |
+
+### The Three Process Skills
+
+**`process-ba-analyst.md`** — Business Analyst persona for producing `docs/concept.md`. Activates when starting a new project or defining scope. Asks clarifying questions before writing. Surfaces assumptions, defines out-of-scope explicitly, lists open questions as spike inputs.
+
+**`process-product-manager.md`** — Product Manager persona for producing `docs/requirements.md`. Requires concept.md and at least one spike to exist before starting. Translates validated ideas into user stories, measurable NFRs, and epics. Does not prescribe implementation.
+
+**`process-scrum-master.md`** — Scrum Master persona for breaking epics into well-formed stories. Used throughout the project lifecycle, not just at inception. Applies INVEST criteria, identifies dependencies, produces draft GitHub story issues, adds stories to epic task list.
+
+### Skill File Location
+
+```
+.claude/skills/
+  process-ba-analyst.md        ← copied to every project by setup.sh
+  process-product-manager.md   ← copied to every project by setup.sh
+  process-scrum-master.md      ← copied to every project by setup.sh
+  [domain-a].md                ← project-specific topic skill
+  [domain-b].md                ← project-specific topic skill
+```
+
+Templates at `templates/skills/process-*.md`.
 
 ---
 
@@ -1212,10 +1384,13 @@ user-docs: false
 │   ├── context-recovery.sh          SessionStart — Tier 2 + branch status + Tier 3 hint
 │   ├── pre-commit-guard.sh          PreToolUse — git commit gate
 │   ├── pre-pr-guard.sh              PreToolUse — gh pr create gate
-│   └── pre-release-guard.sh         PreToolUse — git tag gate
+│   └── pre-release-guard.sh         PreToolUse — git tag gate (v1.3: accepts issue list)
 └── skills/
-    ├── [domain-a].md                Topic skill navigator
-    └── [domain-b].md                Topic skill navigator
+    ├── process-ba-analyst.md        Process skill — BA Analyst persona (copied by setup.sh)
+    ├── process-product-manager.md   Process skill — PM persona (copied by setup.sh)
+    ├── process-scrum-master.md      Process skill — Scrum Master persona (copied by setup.sh)
+    ├── [domain-a].md                Topic skill navigator (project-specific)
+    └── [domain-b].md                Topic skill navigator (project-specific)
 
 ~/.claude/skills/
 └── release-management.md            Global — shared across all projects
@@ -1224,13 +1399,25 @@ user-docs: false
 ├── README.md                        Fragment format reference (never deleted)
 └── [issue]-[slug].md               Pending fragments
 
+.github/
+└── ISSUE_TEMPLATE/                  Issue templates (copied by setup.sh)
+    ├── epic.md
+    ├── story.md
+    ├── spike.md
+    ├── investigation.md
+    ├── bug.md
+    └── chore.md
+
 docs/
+├── concept.md                       Initial project concept — written once, not updated
 ├── as-built.md                      AB-xxx entries + current + build history
 ├── findings.md                      Permanent operational gotcha register (F-xxx)
 ├── assumptions.md                   Unverified tracker (A-xxx) + resolved section
 ├── beliefs-and-tests.md             Investigation journal (B-xxx, T-xxx)
 ├── [topic]-investigation.md         Topic-specific deep investigation (optional)
-├── requirements.md                  Requirements spec (optional)
+├── requirements.md                  PRD — functional requirements, NFRs, epics (optional)
+├── spikes/                          Spike output docs (optional, when substantial)
+│   └── [issue]-[slug].md
 ├── release_workflow.md              Project-specific release notes
 └── runbook.md                       Deployment guide (optional)
 ```
@@ -1368,7 +1555,8 @@ Revisit if you have genuinely interdependent parallel workstreams where two agen
 
 | Project | Mode | Version | Skills | Context weight | Status |
 |---------|------|---------|--------|---------------|--------|
-| HA_Home | `worktree` | 1.2 | 7 (cameras-frigate, dashboard-kiosk, energy-system, network-infra, pir-lighting, pool-heating, release-workflow) | Heavy | Retrofitted ✓ — PR #182, v0.4.34 |
-| Scores4Streams V2 | `main` | 1.2 | 8 | Medium | Retrofitted ✓ — guards verified in live session |
-| Edge Hunter (NRL) | `worktree` | 1.2 | 9 (betting-workflow, collaboration, dashboard-ui, deployment, help-guide, model-engine, multi-sport, multi-tenant, notifications) | Medium | Retrofitted ✓ — rebrand branch rebased |
-| R They OK | `main` | 1.2 | 4 (baseline-engine, ha-addon, sensor-pairing, deployment) | Light | Retrofitted ✓ — backlog + roadmap done |
+| HA_Home | `worktree` | 1.3 | 7 domain + 3 process | Heavy | v1.2 retrofitted ✓ — v1.3 update pending |
+| Scores4Streams V2 | `main` | 1.3 | 8 domain + 3 process | Medium | v1.2 retrofitted ✓ — v1.3 update pending |
+| Edge Hunter (NRL) | `worktree` | 1.3 | 9 domain + 3 process | Medium | v1.2 retrofitted ✓ — v1.3 update pending |
+| R They OK | `main` | 1.3 | 4 domain + 3 process | Light | v1.2 retrofitted ✓ — v1.3 update pending |
+| Thunkit Factory | `main` | 1.3 | 4 domain + 3 process | Medium | v1.2 retrofitted ✓ — v1.3 update pending |

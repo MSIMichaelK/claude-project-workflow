@@ -2,13 +2,17 @@
 
 > Copy-paste this into a Claude Code session in the project to be retrofitted.
 > Adapt the project-specific sections before pasting.
+>
+> Two scenarios:
+>   A. First-time retrofit — project has never had the workflow standard applied
+>   B. v1.3 update — project is on v1.2, adding issue templates, process skills, and updated release guard
 
 ---
 
-## Prompt
+## Prompt A — First-Time Retrofit (v1.2 baseline)
 
 ```
-Retrofit this project to the Claude workflow standard v1.2.
+Retrofit this project to the Claude workflow standard v1.3.
 
 Read these in order:
 1. ~/Documents/GitHub/claude-project-workflow/standards/claude-workflow-standards-v3.md
@@ -63,20 +67,99 @@ When creating findings.md, assumptions.md, or other new docs:
 - Use the entry formats from the standard (F-xxx, A-xxx, etc.)
 - Post the proposed content for review before writing
 
+### v1.3 additions (include in every first-time retrofit)
+
+After core infrastructure is in place:
+
+1. Copy issue templates:
+   Copy all files from ~/Documents/GitHub/claude-project-workflow/templates/github/ISSUE_TEMPLATE/
+   to <project>/.github/ISSUE_TEMPLATE/
+
+2. Copy process skills:
+   Copy these three files to <project>/.claude/skills/:
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ba-analyst.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-product-manager.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-scrum-master.md
+
+3. Install updated pre-release-guard:
+   Copy ~/Documents/GitHub/claude-project-workflow/hooks/pre-release-guard.sh
+   to <project>/.claude/hooks/pre-release-guard.sh
+   (replaces the old single-issue guard)
+
 ### Verification
 
 After all infrastructure is in place:
 - Run context-recovery.sh and confirm it reads from .claude/context-files
 - Attempt a git commit without a changelog fragment — confirm it's blocked
 - If worktree mode: attempt a commit on main — confirm it's blocked
+- Confirm .github/ISSUE_TEMPLATE/ contains all 6 templates
+- Confirm .claude/skills/ contains the 3 process skills
 - Show me the final .claude/ directory tree
 
 ### What NOT to do in this session
 
 - Do NOT bootstrap topic skills — use the separate bootstrap prompt for that
-- Do NOT renumber ADR/AB entries — that's a separate session (especially for NRL)
+- Do NOT renumber ADR/AB entries — that's a separate session
 - Do NOT modify functional code, config, or automations
 - Do NOT trim CLAUDE.md yet — that happens after skills exist to absorb the detail
+```
+
+---
+
+## Prompt B — v1.3 Update (already on v1.2)
+
+> For projects that completed a v1.2 retrofit in March 2026 and need the v1.3 additions only.
+
+```
+Update this project from workflow standard v1.2 to v1.3.
+
+Read the updated standard first:
+  ~/Documents/GitHub/claude-project-workflow/standards/claude-workflow-standards-v3.md
+
+### What v1.3 adds (three things only)
+
+1. Issue templates — GitHub issue templates for epic, story, spike, investigation, bug, chore
+2. Process skills — BA Analyst, Product Manager, Scrum Master personas
+3. Updated pre-release-guard — accepts a list of issue numbers, checks each is closed
+   with retirement checklist completed
+
+### Steps
+
+1. Create .github/ISSUE_TEMPLATE/ if it doesn't exist
+
+2. Copy issue templates:
+   Copy all 6 files from ~/Documents/GitHub/claude-project-workflow/templates/github/ISSUE_TEMPLATE/
+   to .github/ISSUE_TEMPLATE/
+   Files: epic.md, story.md, spike.md, investigation.md, bug.md, chore.md
+
+3. Copy process skills:
+   Copy these 3 files to .claude/skills/:
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ba-analyst.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-product-manager.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-scrum-master.md
+
+4. Replace pre-release-guard:
+   Copy ~/Documents/GitHub/claude-project-workflow/hooks/pre-release-guard.sh
+   to .claude/hooks/pre-release-guard.sh
+   chmod +x .claude/hooks/pre-release-guard.sh
+
+### Verification
+
+- Confirm .github/ISSUE_TEMPLATE/ has all 6 templates
+- Confirm .claude/skills/ has the 3 process-*.md skills
+- Run: bash .claude/hooks/pre-release-guard.sh
+  (should print usage message asking for issue numbers — that's correct)
+
+### What does NOT change
+
+- context-recovery.sh — no change
+- pre-commit-guard.sh — no change
+- pre-pr-guard.sh — no change
+- context-files — no change
+- Any existing skills — no change
+- All project docs — no change
+
+Post the file list of what was added when done.
 ```
 
 ---

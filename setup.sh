@@ -62,8 +62,11 @@ echo ""
 
 # Create directories
 mkdir -p "$PROJECT_DIR/docs"
+mkdir -p "$PROJECT_DIR/docs/spikes"
 mkdir -p "$PROJECT_DIR/.claude/hooks"
+mkdir -p "$PROJECT_DIR/.claude/skills"
 mkdir -p "$PROJECT_DIR/.changelog"
+mkdir -p "$PROJECT_DIR/.github/ISSUE_TEMPLATE"
 
 # Helper: copy template with project name substitution
 copy_template() {
@@ -101,7 +104,7 @@ else
   echo "  CREATE .claude/settings.json"
 fi
 
-# Copy and customize the hook script
+# Copy and customize the hook scripts
 HOOK_DEST="$PROJECT_DIR/.claude/hooks/context-recovery.sh"
 if [[ -f "$HOOK_DEST" ]]; then
   echo "  SKIP  $HOOK_DEST (already exists)"
@@ -110,6 +113,37 @@ else
   chmod +x "$HOOK_DEST"
   echo "  CREATE $HOOK_DEST"
 fi
+
+RELEASE_GUARD_DEST="$PROJECT_DIR/.claude/hooks/pre-release-guard.sh"
+if [[ -f "$RELEASE_GUARD_DEST" ]]; then
+  echo "  SKIP  $RELEASE_GUARD_DEST (already exists)"
+else
+  cp "$SCRIPT_DIR/hooks/pre-release-guard.sh" "$RELEASE_GUARD_DEST"
+  chmod +x "$RELEASE_GUARD_DEST"
+  echo "  CREATE $RELEASE_GUARD_DEST"
+fi
+
+# Copy issue templates
+for template in "$SCRIPT_DIR/templates/github/ISSUE_TEMPLATE/"*.md; do
+  dest="$PROJECT_DIR/.github/ISSUE_TEMPLATE/$(basename "$template")"
+  if [[ -f "$dest" ]]; then
+    echo "  SKIP  $dest (already exists)"
+  else
+    cp "$template" "$dest"
+    echo "  CREATE $dest"
+  fi
+done
+
+# Copy process skills
+for skill in "$SCRIPT_DIR/templates/skills/process-"*.md; do
+  dest="$PROJECT_DIR/.claude/skills/$(basename "$skill")"
+  if [[ -f "$dest" ]]; then
+    echo "  SKIP  $dest (already exists)"
+  else
+    cp "$skill" "$dest"
+    echo "  CREATE $dest"
+  fi
+done
 
 # Update .gitignore if it exists
 GITIGNORE="$PROJECT_DIR/.gitignore"
@@ -139,5 +173,14 @@ echo "  4. Start adding as-built decisions to docs/as-built.md as you make them"
 if [[ "$INCLUDE_INVESTIGATIONS" == true ]]; then
   echo "  5. Use docs/beliefs-and-tests.md when investigating complex issues"
 fi
+echo ""
+echo "  Issue templates installed in .github/ISSUE_TEMPLATE/ (epic, story, spike, investigation, bug, chore)"
+echo "  Process skills installed in .claude/skills/ (BA Analyst, PM, Scrum Master)"
+echo ""
+echo "  Greenfield? Run planning phases first:"
+echo "    1. docs/concept.md  — use process-ba-analyst skill"
+echo "    2. Spike(s)         — use spike issue template"
+echo "    3. docs/requirements.md — use process-product-manager skill"
+echo "    4. Epic issues      — use process-scrum-master skill"
 echo ""
 echo "The SessionStart hook will fire on your next Claude session in this project."
