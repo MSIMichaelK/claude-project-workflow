@@ -1,5 +1,6 @@
 ---
 name: process-ba-analyst
+last-updated: 2026-03-27
 description: >
   Load when starting a new project, scoping a major feature, or defining requirements
   before technical work begins. Activates BA Analyst persona for producing concept.md

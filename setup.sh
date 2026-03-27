@@ -175,7 +175,7 @@ if [[ "$INCLUDE_INVESTIGATIONS" == true ]]; then
 fi
 echo ""
 echo "  Issue templates installed in .github/ISSUE_TEMPLATE/ (epic, story, spike, investigation, bug, chore)"
-echo "  Process skills installed in .claude/skills/ (BA Analyst, PM, Scrum Master)"
+echo "  Process skills installed in .claude/skills/ (BA Analyst, PM, Scrum Master, UX Designer, QA Tester)"
 echo ""
 echo "  Greenfield? Run planning phases first:"
 echo "    1. docs/concept.md  — use process-ba-analyst skill"

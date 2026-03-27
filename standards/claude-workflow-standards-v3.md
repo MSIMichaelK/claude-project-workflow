@@ -457,6 +457,7 @@ A topic skill is a **navigator** — not a knowledge document. It contains preci
 ```markdown
 ---
 name: ha-addon
+last-updated: 2026-03-15        # date this skill was last meaningfully updated
 description: >
   Load when working on: HA OS add-on, addons/ directory, config.yaml schema,
   Supervisor, add-on deployment, SSH to HA Green, enabled_sensors, addon paths,
@@ -495,6 +496,26 @@ gh issue view 101   # JWT env var corruption
 - Do NOT add new options to add-on config.yaml schema
 - Do NOT use heredocs over SSH
 - Always update BOTH add-on paths when deploying
+```
+
+### Skill Staleness — `last-updated`
+
+Every skill (topic and process) carries a `last-updated` date in its frontmatter. This is the primary mechanism for detecting drift between a skill and the project's accumulated knowledge.
+
+**Convention:**
+- Set `last-updated` when the skill is created
+- Update it whenever a new ADR, AB entry, or finding is added to the skill
+- The story retirement checklist item "new regression risks added to relevant skill" should trigger a `last-updated` bump
+
+**Spotting staleness:** if a skill's `last-updated` is significantly older than the project's most recent CHANGELOG entries, it likely needs a review. No automated enforcement — this is a visible signal, not a hard block.
+
+```yaml
+---
+name: batting-engine
+last-updated: 2026-03-15    # ← if this is months behind last release, review the skill
+description: >
+  Load when working on...
+---
 ```
 
 ### Skill Description
@@ -709,6 +730,10 @@ Process skills are a distinct category from domain (topic) skills. They tell Cla
 **`process-product-manager.md`** — Product Manager persona for producing `docs/requirements.md`. Requires concept.md and at least one spike to exist before starting. Translates validated ideas into user stories, measurable NFRs, and epics. Does not prescribe implementation.
 
 **`process-scrum-master.md`** — Scrum Master persona for breaking epics into well-formed stories. Used throughout the project lifecycle, not just at inception. Applies INVEST criteria, identifies dependencies, produces draft GitHub story issues, adds stories to epic task list.
+
+**`process-ux-designer.md`** — UX Designer persona for implementation-time UI work. Audits existing components and AB entries before building anything new. Documents every non-obvious UI decision as an AB entry. Checks mobile/responsive behaviour. Prevents the most commonly re-derived class of decisions.
+
+**`process-qa-tester.md`** — QA Tester persona for writing tests, reviewing coverage, and pre-release test checks. Targets regression risks from domain skills and findings.md first. Documents coverage decisions as AB entries. Includes Playwright-specific conventions for browser testing projects.
 
 ### Skill File Location
 
@@ -1389,6 +1414,8 @@ user-docs: false
     ├── process-ba-analyst.md        Process skill — BA Analyst persona (copied by setup.sh)
     ├── process-product-manager.md   Process skill — PM persona (copied by setup.sh)
     ├── process-scrum-master.md      Process skill — Scrum Master persona (copied by setup.sh)
+    ├── process-ux-designer.md       Process skill — UX Designer persona (copied by setup.sh)
+    ├── process-qa-tester.md         Process skill — QA Tester persona (copied by setup.sh)
     ├── [domain-a].md                Topic skill navigator (project-specific)
     └── [domain-b].md                Topic skill navigator (project-specific)
 

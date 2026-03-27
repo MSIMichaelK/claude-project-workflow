@@ -76,10 +76,12 @@ After core infrastructure is in place:
    to <project>/.github/ISSUE_TEMPLATE/
 
 2. Copy process skills:
-   Copy these three files to <project>/.claude/skills/:
+   Copy these five files to <project>/.claude/skills/:
    - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ba-analyst.md
    - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-product-manager.md
    - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-scrum-master.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ux-designer.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-qa-tester.md
 
 3. Install updated pre-release-guard:
    Copy ~/Documents/GitHub/claude-project-workflow/hooks/pre-release-guard.sh
@@ -133,10 +135,12 @@ Read the updated standard first:
    Files: epic.md, story.md, spike.md, investigation.md, bug.md, chore.md
 
 3. Copy process skills:
-   Copy these 3 files to .claude/skills/:
+   Copy these 5 files to .claude/skills/:
    - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ba-analyst.md
    - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-product-manager.md
    - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-scrum-master.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ux-designer.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-qa-tester.md
 
 4. Replace pre-release-guard:
    Copy ~/Documents/GitHub/claude-project-workflow/hooks/pre-release-guard.sh

@@ -1,5 +1,6 @@
 ---
 name: process-scrum-master
+last-updated: 2026-03-27
 description: >
   Load when breaking an epic into stories, planning sprint work, writing story issues,
   or sizing a feature. Use throughout the project lifecycle — not just at inception.

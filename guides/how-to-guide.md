@@ -250,6 +250,10 @@ Three planning personas are installed in every project under `.claude/skills/`:
 | `process-ba-analyst.md` | Starting a new project — produce docs/concept.md |
 | `process-product-manager.md` | After spikes — produce docs/requirements.md |
 | `process-scrum-master.md` | Breaking an epic into stories — throughout project lifecycle |
+| `process-ux-designer.md` | Any UI/UX work — audit existing patterns, document decisions as AB entries |
+| `process-qa-tester.md` | Writing tests, reviewing coverage, pre-release test check |
+
+**Spotting stale skills:** every skill has a `last-updated` date in its frontmatter. If it's significantly older than your most recent release, review it for missing AB entries or regression risks.
 
 Load them like any topic skill: reference in the worktree starter prompt or load explicitly.
 

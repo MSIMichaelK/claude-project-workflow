@@ -91,10 +91,12 @@ With YAML frontmatter (name + description for auto-triggering) and empty section
 - Issue History
 - Regression Risks
 
-Also copy the three process skills to .claude/skills/:
+Also copy the five process skills to .claude/skills/:
   ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ba-analyst.md
   ~/Documents/GitHub/claude-project-workflow/templates/skills/process-product-manager.md
   ~/Documents/GitHub/claude-project-workflow/templates/skills/process-scrum-master.md
+  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ux-designer.md
+  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-qa-tester.md
 
 These will be populated as the project accumulates decisions.
 

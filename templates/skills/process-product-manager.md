@@ -1,5 +1,6 @@
 ---
 name: process-product-manager
+last-updated: 2026-03-27
 description: >
   Load when writing or refining a PRD, defining functional requirements, translating
   spike findings into structured requirements, or creating docs/requirements.md.
