@@ -9,8 +9,9 @@
 
 ## Status
 
-**Standard version:** 1.2 (2026-03-23)
-**All five projects retrofitted:** HA_Home ✓, Scores4Streams ✓, NRL ✓, RTheyOK ✓, Game Studio ✓
+**Standard version:** 1.3 (2026-03-27)
+**All five projects retrofitted to v1.2:** HA_Home ✓, Scores4Streams ✓, NRL ✓, RTheyOK ✓, Game Studio ✓
+**v1.3 propagation to projects:** pending (use Prompt B in retrofit-existing-starter.md)
 
 ---
 
@@ -21,75 +22,89 @@
 - `as-built.md` = current deployed state + build history + AB-xxx entries (implementation decisions)
 - ADR test: "would reversing this require rearchitecting, or just rewriting a function?"
 - ADRs live in ARCHITECTURE.md. ABs live in as-built.md. Both reference GitHub issues for full rationale.
-- ADR supersession: never change Decision or Rationale — create new ADR. Typos and clarifications are fine to edit in place (v1.1 relaxation).
+- ADR supersession: never change Decision or Rationale — create new ADR. Typos and clarifications are fine to edit in place.
 - AB entries are append-only
+- `docs/concept.md` = initial project concept, written once, never updated — deviations become ADRs
 
 ### Three Investigation Documents (distinct, not interchangeable)
 - `findings.md` — permanent operational gotcha register (F-xxx). Things that fail, append-only, never deleted
-- `assumptions.md` — unverified tracker (A-xxx) with lifecycle: open -> confirmed/disproved -> resolved
+- `assumptions.md` — unverified tracker (A-xxx) with lifecycle: open → confirmed/disproved → resolved
 - `beliefs-and-tests.md` — active investigation journal (B-xxx, T-xxx) for empirical/sensor/model projects
-- These form a pipeline: assumption -> investigation -> finding
+- These form a pipeline: assumption → investigation → finding
 - Topic-specific investigation docs (e.g. `energy-investigation.md`) are valid for complex domains
 
 ### Two Workflow Modes
 - `worktree` — commits to main are BLOCKED. All work in worktrees. (HA_Home, NRL)
-- `main` — no branch enforcement. Work on main or worktree, your choice. (Scores4S, RTheyOk)
+- `main` — no branch enforcement. Work on main or worktree, your choice. (Scores4S, RTheyOk, Game Studio)
 - `main` mode does NOT prohibit worktrees — it just doesn't enforce them
-- Scores4S worktree aversion is a project-specific incident note, not a mode-level rule
 
-### Three-Tier Context Model (v1.1 — configurable)
+### Three-Tier Context Model
 - Tier 1: CLAUDE.md (always loaded, auto)
 - Tier 2: Configurable via `.claude/context-files` (every session, via SessionStart hook)
-- Tier 3: topic skill navigator (per task, via worktree starter prompt OR auto-hint from branch name)
+- Tier 3: skill navigator — topic skill OR process skill (per task, via worktree starter prompt OR auto-hint from branch name)
 - Each project declares its own Tier 2 file list based on incident history
 - Default Tier 2: ARCHITECTURE.md + MEMORY.md + gh issue list
-- Projects with heavier context needs (HA_Home) add more files — this is earned, not bloat
-- Process: start with defaults, add files when incidents prove they're needed, review during retrofits
+- Process for Tier 2: start with defaults, add files when incidents prove they're needed
 
 ### Topic Skills as Navigators
 - Skills are NOT knowledge documents — they are POINTERS to existing knowledge
 - Content: ADR/AB entry numbers, findings numbers, issue numbers to fetch, regression risks
-- Skills load the pointers (~300 tokens), then Claude loads only what's relevant
 - Descriptions must be precise enough for auto-triggering (specific filenames, entity names, urgency phrase)
 - Global skill `~/.claude/skills/release-management.md` shared across all projects
+
+### Process Skills (v1.3)
+- Three process skills copied to every project by setup.sh: process-ba-analyst, process-product-manager, process-scrum-master
+- Process skills tell Claude HOW to approach a type of work — distinct from topic skills which tell Claude WHAT to know
+- Naming convention: `process-<role>.md` to distinguish from domain skills
+- Templates in `templates/skills/`
+
+### Issue Hierarchy (v1.3)
+- Six types: epic, story, spike, investigation, bug, chore
+- Epic = strategic container, never a release trigger, spans multiple sprints
+- Story = primary release unit, one PR, independently testable, has retirement checklist
+- Spike = time-boxed question, has time box + definition of done
+- Investigation = open-ended, anchors to findings.md, no time box
+- Release = explicit curation of closed stories/bugs — not automatic at any hierarchy level
+- Epic task list uses `- [ ] #number` format — GitHub auto-checks when referenced issue closes
+- Templates in `templates/github/ISSUE_TEMPLATE/`
+
+### Greenfield Planning Flow (v1.3)
+- Sequence: concept doc → spike(s) → prototype (optional) → PRD → epics/stories → setup.sh
+- PRD written after spikes, not before — requirements written in a vacuum are fiction
+- docs/concept.md written once at project start, not updated
+- Spike outputs: quick → findings.md (F-xxx), substantial → docs/spikes/<issue>-<slug>.md
+
+### GitHub Issue Discipline
+- All work starts with an open GitHub issue using the correct template
+- pre-commit-guard blocks commits if issue doesn't exist or is closed
+- Chore exception: branches named `chore/` bypass issue requirement
+- Issues enriched before closing — structured comment with what was done, ADR/AB refs, skill updated
+- Closed issues become queryable context — `gh issue view N` gives full lifecycle record
+- Story/bug retirement checklist must be completed before closing
+
+### Pre-Release Guard (v1.3 update)
+- Now accepts a list of story/bug issue numbers: `bash pre-release-guard.sh 88 89 90`
+- Checks each issue is closed and retirement checklist is complete
+- Warns if issue type is epic/spike/investigation (wrong release unit)
+- Old behaviour (fragment assembly, version file checks) preserved alongside new checks
 
 ### GitHub Issue Discipline
 - All work starts with an open GitHub issue
 - pre-commit-guard blocks commits if issue doesn't exist or is closed
-- Chore exception: branches named `chore/` bypass issue requirement (v1.1)
+- Chore exception: branches named `chore/` bypass issue requirement
 - Issues are enriched before closing — structured comment with what was done, ADR/AB refs, skill updated
 - Closed issues become queryable context — `gh issue view N` gives full lifecycle record
-
-### Stop Hook for Auto-Capture (newly adopted)
-- Session close checklist fires on every Stop event
-- Prompts Claude to surface unrecorded decisions before session ends
-- Lightweight — prints checklist only, no auto-write
-
-### Auto-Triggering Skills (newly adopted)
-- Skills should auto-trigger from descriptions, not require manual loading
-- SessionStart hook now hints at Tier 3 skill based on branch name (v1.1)
-- After bootstrap, test each skill by starting a fresh session and giving a domain task without mentioning the skill
-- If it doesn't trigger, sharpen the description
 
 ### Version Files Config
 - `.claude/version-files` lists all files containing version numbers per project
 - pre-release-guard reads this file instead of hardcoded locations
-- NRL: `dashboard.py`. RTheyOk: `baseline_engine/app.py` + `addons/rtheyok-baseline-engine/config.yaml`
 
 ### User Documentation
 - Declared in `.claude/release-artifacts` as `user-docs: false` or `user-docs: <path>`
-- NRL: enforce now (Help tab in dashboard.py)
-- RTheyOk: enforce from first release (users arriving soon)
-- Scores4S: deferred — UI still iterating
-- HA_Home: minimal, not yet
-
-### NRL-Specific
-- 66 design decisions in ARCHITECTURE.md currently without ADR notation
-- Bootstrap session will renumber as ADR-xxx
-- This is a one-session task — batch rename, verify nothing breaks
+- Enforced when set — pre-release-guard checks the file was modified
 
 ### Never Cycle / Never Guess / Always Verify Rules
-- Derived from RTheyOk. Now standard for all projects.
+- Derived from RTheyOk. Standard for all projects.
 - Never cycle: if something fails twice with same approach, STOP. State what failed, propose different approach.
 - Never guess: check docs or ls first. Read code before assuming endpoints.
 - Always verify: run verification command after every deployment action.
@@ -97,66 +112,68 @@
 ### Two-Environment Table
 - Required in CLAUDE.md for any project with dev + production environments
 - "Before every remote command: state which environment and why"
-- RTheyOk and HA_Home have this. Scores4S and NRL may not need it (single environment each).
+
+### BMAD Attribution
+- Process skills (BA Analyst, PM, Scrum Master) and greenfield planning flow inspired by BMAD Method (Brian Goff)
+- Hook enforcement, tier system, document taxonomy, and issue hierarchy are original to this workflow
+- Attribution in README.md Acknowledgements section
 
 ---
 
-## Project Inventory (Post-Retrofit 2026-03-23)
+## Project Inventory (Post-Retrofit v1.2 — v1.3 propagation pending)
 
-### HA_Home — Retrofitted ✓
-- **Mode:** worktree | **Context weight:** Heavy | **Skills:** 7
+### HA_Home — v1.2 ✓
+- **Mode:** worktree | **Context weight:** Heavy | **Skills:** 7 domain
 - **Skills:** cameras-frigate, dashboard-kiosk, energy-system, network-infra, pir-lighting, pool-heating, release-workflow
-- **Hooks:** SessionStart ✓, pre-commit-guard ✓, pre-pr-guard ✓, pre-release-guard ✓
-- **Tested:** Full PR + merge + release cycle verified (PR #182, v0.4.34)
+- **v1.3 pending:** issue templates, 3 process skills, updated pre-release-guard
 
-### Scores4Streams V2 — Retrofitted ✓
-- **Mode:** main | **Context weight:** Medium | **Skills:** 8
-- **Hooks:** SessionStart ✓, pre-commit-guard ✓, pre-pr-guard ✓, pre-release-guard ✓
-- **Tested:** Guards verified in live session, backlog work proceeding under new workflow
+### Scores4Streams V2 — v1.2 ✓
+- **Mode:** main | **Context weight:** Medium | **Skills:** 8 domain
+- **v1.3 pending:** issue templates, 3 process skills, updated pre-release-guard
 
-### Edge Hunter (NRL) — Retrofitted ✓
-- **Mode:** worktree | **Context weight:** Medium | **Skills:** 9
+### Edge Hunter (NRL) — v1.2 ✓
+- **Mode:** worktree | **Context weight:** Medium | **Skills:** 9 domain
 - **Skills:** betting-workflow, collaboration, dashboard-ui, deployment, help-guide, model-engine, multi-sport, multi-tenant, notifications
-- **Hooks:** SessionStart ✓, pre-commit-guard ✓, pre-pr-guard ✓, pre-release-guard ✓
-- **Pending:** feature/rebrand branch rebased onto main, ready to PR
+- **v1.3 pending:** issue templates, 3 process skills, updated pre-release-guard
 
-### R They OK — Retrofitted ✓
-- **Mode:** main | **Context weight:** Light | **Skills:** 4
+### R They OK — v1.2 ✓
+- **Mode:** main | **Context weight:** Light | **Skills:** 4 domain
 - **Skills:** baseline-engine, ha-addon, sensor-pairing, deployment
-- **Hooks:** SessionStart ✓, pre-commit-guard ✓, pre-pr-guard ✓, pre-release-guard ✓
-- **Tested:** Backlog and roadmap session completed under new workflow
+- **v1.3 pending:** issue templates, 3 process skills, updated pre-release-guard
 
-### The Kronk Game Studio — Retrofitted ✓
+### Thunkit Factory (Game Studio) — v1.2 ✓
 - **Mode:** main | **Context weight:** Medium | **Multi-persona:** Susi (Art Director) + Alex (Lead Dev)
-- **Hooks:** SessionStart ✓, pre-commit-guard ✓, pre-pr-guard ✓, pre-release-guard ✓
-- **Note:** Dad (Kronky) is Game Designer — Claude fills Susi + Alex only. Codecks MCP integration for project management.
+- **Skills:** art-direction, codecks-ops, engineering, game-design
+- **Note:** [producer] is Game Designer — Claude fills Susi + Alex only. Codecks MCP integration.
+- **v1.3 pending:** issue templates, 3 process skills, updated pre-release-guard
 
 ---
 
-## Retrofit Learnings
+## Retrofit Learnings (accumulated v1.0 → v1.3)
 
 1. **Skill count varies wildly** — RTheyOK needed 4, NRL needed 9. Don't force a number.
 2. **Chore fragments used immediately** — `0-chore-roadmap-and-skills.md` validated the escape hatch.
-3. **Roadmap as Tier 2** — RTheyOK added `docs/roadmap.md` to context-files. Recommend for milestone-driven projects.
+3. **Roadmap as Tier 2** — RTheyOK added `docs/roadmap.md` to context-files. Useful for milestone-driven projects.
 4. **ADR renumbering not needed** — no project benefited. Keep existing numbering schemes.
 5. **Existing sessions don't pick up new hooks** — must start a new session after retrofit.
-6. **HA_Home token pressure** — context-recovery loads too much. Needs slim ARCHITECTURE summary for Tier 2.
+6. **GitHub issues are already story files** — structured issue templates replace the need for separate story doc files.
+7. **PRD should follow spikes, not precede them** — requirements written before technical validation are often wrong.
+8. **Process skills need to be in-project** — SM skill needs domain skill context to write accurate story constraints.
 
 ---
 
-## Known Issues and Future Work
+## Known Open Items
 
-1. **Game studio multi-persona** — standard extension may be needed as complexity grows
-2. **Skill auto-triggering** — untested at scale across all projects
-3. **Compaction resilience** — untested. Does re-loading skill pointers after compaction preserve enough context?
-4. **HA_Home Tier 2 optimisation** — slim summary needed, full ARCHITECTURE.md to Tier 3
+1. **v1.3 propagation** — all five projects need Prompt B (issue templates + process skills + updated guard)
+2. **Skill auto-triggering at scale** — process skills haven't been tested across all projects yet
+3. **Epic/story workflow validation** — issue hierarchy designed but not yet used in a live project cycle
 
 ---
 
 ## Reference
 
-Workflow standards doc: standards/claude-workflow-standards-v3.md (v1.2)
-This brief: standards/bootstrap-session-brief.md
-Retrofit plans: plans/retrofit-*.md
-Prompts: prompts/new-project-starter.md, prompts/retrofit-existing-starter.md
-Guide: guides/how-to-guide.md
+Full standard: `standards/claude-workflow-standards-v3.md` (v1.3)
+This brief: `standards/bootstrap-session-brief.md`
+Retrofit plans: `plans/retrofit-*.md`
+Prompts: `prompts/new-project-starter.md`, `prompts/retrofit-existing-starter.md`
+Guide: `guides/how-to-guide.md`
