@@ -33,6 +33,8 @@ Three tiers: always-loaded (CLAUDE.md), every-session (configurable per project)
 **5. Structures planning before building**
 A greenfield flow and process skills (BA Analyst, Product Manager, Scrum Master) borrow the best of structured planning methodology without the overhead of a full framework.
 
+**Full technical reference:** [`standards/claude-workflow-standards-v3.md`](standards/claude-workflow-standards-v3.md) — the complete standard including all hook implementations, configuration reference, and setup instructions.
+
 ---
 
 ## What's in the Box
