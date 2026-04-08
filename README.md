@@ -69,9 +69,6 @@ prompts/
 guides/
   how-to-guide.md                   Plain-language usage guide
 
-plans/
-  retrofit-*.md                     Completed retrofit plans (HA_Home, NRL, Scores4Streams, RTheyOK, Game Studio)
-
 setup.sh                            Scaffolding script for new projects
 ```
 
