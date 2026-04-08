@@ -10,7 +10,7 @@
 ## Status
 
 **Standard version:** 1.3 (2026-03-27)
-**All five projects retrofitted to v1.2:** HA_Home ✓, Scores4Streams ✓, NRL ✓, RTheyOK ✓, Game Studio ✓
+**All five projects retrofitted to v1.3:** HA_Home ✓, Scores4Streams ✓, NRL ✓, RTheyOK ✓, Game Studio ✓
 **v1.3 propagation to projects:** pending (use Prompt B in retrofit-existing-starter.md)
 
 ---
@@ -120,28 +120,28 @@
 
 ---
 
-## Project Inventory (Post-Retrofit v1.2 — v1.3 propagation pending)
+## Project Inventory (Post-Retrofit v1.3 — v1.3 propagation pending)
 
-### HA_Home — v1.2 ✓
+### HA_Home — v1.3 ✓
 - **Mode:** worktree | **Context weight:** Heavy | **Skills:** 7 domain
 - **Skills:** cameras-frigate, dashboard-kiosk, energy-system, network-infra, pir-lighting, pool-heating, release-workflow
 - **v1.3 pending:** issue templates, 3 process skills, updated pre-release-guard
 
-### Scores4Streams V2 — v1.2 ✓
+### Scores4Streams V2 — v1.3 ✓
 - **Mode:** main | **Context weight:** Medium | **Skills:** 8 domain
 - **v1.3 pending:** issue templates, 3 process skills, updated pre-release-guard
 
-### Edge Hunter (NRL) — v1.2 ✓
+### Edge Hunter (NRL) — v1.3 ✓
 - **Mode:** worktree | **Context weight:** Medium | **Skills:** 9 domain
 - **Skills:** betting-workflow, collaboration, dashboard-ui, deployment, help-guide, model-engine, multi-sport, multi-tenant, notifications
 - **v1.3 pending:** issue templates, 3 process skills, updated pre-release-guard
 
-### R They OK — v1.2 ✓
+### R They OK — v1.3 ✓
 - **Mode:** main | **Context weight:** Light | **Skills:** 4 domain
 - **Skills:** baseline-engine, ha-addon, sensor-pairing, deployment
 - **v1.3 pending:** issue templates, 3 process skills, updated pre-release-guard
 
-### Thunkit Factory (Game Studio) — v1.2 ✓
+### Thunkit Factory (Game Studio) — v1.3 ✓
 - **Mode:** main | **Context weight:** Medium | **Multi-persona:** Susi (Art Director) + Alex (Lead Dev)
 - **Skills:** art-direction, codecks-ops, engineering, game-design
 - **Note:** [producer] is Game Designer — Claude fills Susi + Alex only. Codecks MCP integration.

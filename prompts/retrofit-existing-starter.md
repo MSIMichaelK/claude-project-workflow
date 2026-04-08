@@ -5,11 +5,11 @@
 >
 > Two scenarios:
 >   A. First-time retrofit — project has never had the workflow standard applied
->   B. v1.3 update — project is on v1.2, adding issue templates, process skills, and updated release guard
+>   B. v1.3 update — project is on v1.3, adding issue templates, process skills, and updated release guard
 
 ---
 
-## Prompt A — First-Time Retrofit (v1.2 baseline)
+## Prompt A — First-Time Retrofit (v1.3 baseline)
 
 ```
 Retrofit this project to the Claude workflow standard v1.3.
@@ -108,12 +108,12 @@ After all infrastructure is in place:
 
 ---
 
-## Prompt B — v1.3 Update (already on v1.2)
+## Prompt B — v1.3 Update (already on v1.3)
 
-> For projects that completed a v1.2 retrofit in March 2026 and need the v1.3 additions only.
+> For projects that completed a v1.3 retrofit in March 2026 and need the v1.3 additions only.
 
 ```
-Update this project from workflow standard v1.2 to v1.3.
+Update this project from workflow standard v1.3 to v1.3.
 
 Read the updated standard first:
   ~/Documents/GitHub/claude-project-workflow/standards/claude-workflow-standards-v3.md

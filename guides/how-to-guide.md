@@ -309,7 +309,7 @@ For greenfield projects, run the planning flow first (concept → spike → PRD)
 Use the retrofit prompt: `prompts/retrofit-existing-starter.md`
 
 - **First-time retrofit** → use Prompt A
-- **Updating v1.2 → v1.3** → use Prompt B (adds issue templates, process skills, updated release guard only)
+- **Updating v1.3 → v1.3** → use Prompt B (adds issue templates, process skills, updated release guard only)
 
 Each project also has a specific plan in `plans/retrofit-<project>.md`.
 

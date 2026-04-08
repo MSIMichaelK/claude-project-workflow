@@ -7,6 +7,14 @@
 
 ## Standard Changelog
 
+### 1.4 — 2026-03-28 (retrofit verification + post-retrofit audit)
+- Retrofit steps rewritten with explicit "Verify by" lines — each step must be confirmed before ticking
+- `findings.md` and `assumptions.md` given distinct descriptions in retrofit steps — previously conflated with `as-built.md`
+- Post-retrofit verification checklist added — runs after all retrofit steps complete, catches gaps before declaring done
+- Projects table updated: Edge Hunter v1.3 retrofit confirmed complete (v1.21.1)
+- Topic investigation doc threshold added: 5+ entries warrants a domain-specific file
+- Topic investigation doc double-duty clarified: a domain file can serve both beliefs-and-tests and findings roles — counts as equivalent when auditing
+
 ### 1.3 — 2026-03-27 (issue hierarchy + planning flow)
 - Issue hierarchy introduced: epic, story, spike, investigation, bug, chore — each with a GitHub issue template
 - Six issue templates added to `templates/github/ISSUE_TEMPLATE/`
@@ -384,7 +392,9 @@ north-facing at this latitude.
 
 ### Topic-Specific Investigation Docs
 
-When a domain has enough complexity to warrant its own dedicated journal (e.g. `docs/energy-investigation.md` for HA_Home), create a topic-specific file. The beliefs-and-tests format applies. The topic skill navigator points to the specific file rather than the generic one.
+When a domain accumulates **5 or more investigation entries**, split it into its own file (e.g. `docs/energy-beliefs-and-tests.md` for HA_Home's energy domain). The beliefs-and-tests format applies. The topic skill navigator points to the specific file rather than the generic one.
+
+A topic investigation doc can serve double duty — combining B-xxx beliefs, T-xxx tests, and operational gotchas (normally findings.md) into a single domain-scoped file. This is correct when the domain is complex enough to justify its own journal. When auditing for findings.md compliance, a topic investigation doc that contains operational failure modes counts as equivalent — note the different name but credit the content.
 
 ---
 
@@ -1539,22 +1549,90 @@ touch docs/beliefs-and-tests.md  # if empirical investigation
 
 ### Good existing docs (HA_Home, Scores4S, NRL, RTheyOk pattern)
 
-One session of work per project:
+One session of work per project. Each step has a **Verify by** line — do not tick the step until the verification passes. Optimistic checkboxes caused the NRL retrofit to declare completion while `as-built.md`, `findings.md`, and `assumptions.md` had never been created.
 
-1. **Clarify ARCHITECTURE.md** — ensure it represents target state. Move any pure "current build state" content to as-built.md. Number or rename design decisions as ADR-xxx.
-2. **Clarify as-built.md** — ensure it has a "current state" section plus build history. AB-xxx entries stay here.
-3. **Create findings.md** — extract operational gotchas from CLAUDE.md, as-built, and session memory. Number as F-xxx.
-4. **Create assumptions.md** — identify anything currently unverified. Surface from CLAUDE.md, requirements, open issues.
-5. **Install hooks** — copy scripts, customise context-recovery.sh incidents section with real project incidents.
+1. **Clarify ARCHITECTURE.md** — ensure it represents design intent and deliberate decisions (ADR-level). Anything that is "we discovered this the hard way" belongs in `as-built.md` instead.
+   **Verify by:** `head -5 ARCHITECTURE.md` confirms last-updated date is today; grep for any numbered decisions that describe discoveries rather than choices — move those to as-built.
+
+2. **Create `docs/as-built.md`** — AB-xxx numbered entries for things discovered during building that would cause regressions if forgotten. Format: Finding / Decision / Why it matters. Seed from existing design decisions lists, CLAUDE.md "common mistakes", and session memory. AB entries are code-pattern discoveries ("the only way to do X", "Y doesn't work", empirical constants).
+   **Verify by:** `ls docs/as-built.md && grep -c "^## AB-" docs/as-built.md` — file exists and has at least one numbered entry.
+
+3. **Create `docs/findings.md`** — F-xxx numbered entries for operational/deployment/hardware gotchas. Distinct from as-built.md: findings are field observations (Pi cron behaviour, API quirks, timezone edge cases), not code patterns. Seed from CLAUDE.md, as-built entries that are deployment-nature, and session memory.
+   **Verify by:** `ls docs/findings.md && grep -c "^## F-" docs/findings.md` — file exists and has at least one numbered entry.
+
+4. **Create `docs/assumptions.md`** (recommended) — A-xxx entries for anything currently unverified. Surface from CLAUDE.md, requirements docs, open issues. Particularly useful for projects with hardware or external dependencies.
+   **Verify by:** `ls docs/assumptions.md` — file exists (may be empty if no assumptions identified).
+
+5. **Install hooks** — copy scripts, customise `context-recovery.sh` incidents section with real project incidents.
+   **Verify by:** `ls .claude/hooks/` shows all four scripts; `cat .claude/settings.json` shows all hooks registered with correct triggers.
+
 6. **Set workflow-mode** — based on actual working pattern.
-7. **Configure context-files** — audit current mandatory reading list. Files that have caused regressions when skipped go in Tier 2. Others become Tier 3 skill references.
+   **Verify by:** `cat .claude/workflow-mode` shows `worktree` or `main`.
+
+7. **Configure context-files** — audit current mandatory reading list. Add `docs/as-built.md` and `docs/findings.md` if created. Files that have caused regressions when skipped go in Tier 2.
+   **Verify by:** `cat .claude/context-files` — lists ARCHITECTURE.md, MEMORY.md, gh-issues, and any docs just created.
+
 8. **Configure version-files** — list all files containing version numbers.
-9. **Create topic skills** — one per domain, navigator format, referencing existing AB/ADR entries.
-10. **Update CLAUDE.md** — add two-environment table if applicable. Add hard rules (never cycle, never guess, always verify). Trim to 1-2 pages — move detail into skills.
+   **Verify by:** `cat .claude/version-files` — lists at least one file; confirm that file exists.
 
-### NRL-specific addition
+9. **Create topic skills** — one per domain, navigator format, referencing existing AB/F/ADR entries.
+   **Verify by:** `ls .claude/skills/*.md` — at least one skill per major domain. Each skill references actual file paths that exist.
 
-Renumber ARCHITECTURE.md design decisions as ADR-xxx. Sed-based batch rename then manual verification. One session, low risk if done carefully.
+10. **Update CLAUDE.md** — set correct standard version string, add documentation map including as-built.md and findings.md, add hard rules. Trim to 1-2 pages — move detail into skills.
+    **Verify by:** `grep "Workflow Standard" CLAUDE.md` shows correct version number. `grep "as-built\|findings" CLAUDE.md` — both appear in the Documentation Map.
+
+11. **Install issue templates** — copy the six templates to `.github/ISSUE_TEMPLATE/`.
+    **Verify by:** `ls .github/ISSUE_TEMPLATE/` shows story.md, bug.md, epic.md, spike.md, investigation.md, chore.md.
+
+12. **Install process skills** — copy BA Analyst, PM, Scrum Master, UX Designer, QA Tester to `.claude/skills/`.
+    **Verify by:** `ls .claude/skills/process-*.md` shows five files.
+
+### Post-Retrofit Verification Checklist
+
+Run this after completing all steps. Do not declare the retrofit done until all pass.
+
+```bash
+# 1. All four hooks present and registered
+ls .claude/hooks/context-recovery.sh .claude/hooks/pre-commit-guard.sh \
+   .claude/hooks/pre-pr-guard.sh .claude/hooks/pre-release-guard.sh
+grep -c "command" .claude/settings.json  # should be >= 4
+
+# 2. Core docs exist
+ls ARCHITECTURE.md MEMORY.md CHANGELOG.md CLAUDE.md
+
+# 3. Required docs exist
+ls docs/as-built.md docs/findings.md
+
+# 4. Docs have content
+grep -c "^## AB-" docs/as-built.md   # >= 1
+grep -c "^## F-" docs/findings.md    # >= 1
+
+# 5. Docs in context-files
+grep "as-built" .claude/context-files
+grep "findings" .claude/context-files
+
+# 6. CLAUDE.md references correct standard version
+grep "Workflow Standard v" CLAUDE.md  # version heading and body should match
+
+# 7. CLAUDE.md Documentation Map includes new docs
+grep "as-built" CLAUDE.md
+grep "findings" CLAUDE.md
+
+# 8. Issue templates all present
+ls .github/ISSUE_TEMPLATE/{story,bug,epic,spike,investigation,chore}.md
+
+# 9. Process skills all present
+ls .claude/skills/process-{ba-analyst,product-manager,scrum-master,ux-designer,qa-tester}.md
+
+# 10. Issue templates don't reference missing files
+# If findings.md exists: OK. If not, remove F-xxx references from story.md and spike.md.
+grep "findings.md" .github/ISSUE_TEMPLATE/story.md && ls docs/findings.md
+
+# 11. No changelog fragments left unassembled (or deliberately pending)
+ls .changelog/*.md | grep -v README
+```
+
+If any check fails, fix it before marking the retrofit complete. The goal is a state where a fresh Claude session can start, read Tier 2, and have accurate, complete context — not a state where the plan says done.
 
 ---
 
@@ -1582,8 +1660,8 @@ Revisit if you have genuinely interdependent parallel workstreams where two agen
 
 | Project | Mode | Version | Skills | Context weight | Status |
 |---------|------|---------|--------|---------------|--------|
-| HA_Home | `worktree` | 1.3 | 7 domain + 3 process | Heavy | v1.2 retrofitted ✓ — v1.3 update pending |
+| HA_Home | `worktree` | 1.4 | 7 domain + 5 process | Heavy | v1.4 retrofitted ✓ (v0.4.44) |
 | Scores4Streams V2 | `main` | 1.3 | 8 domain + 3 process | Medium | v1.2 retrofitted ✓ — v1.3 update pending |
-| Edge Hunter (NRL) | `worktree` | 1.3 | 9 domain + 3 process | Medium | v1.2 retrofitted ✓ — v1.3 update pending |
+| Edge Hunter (NRL) | `worktree` | 1.4 | 9 domain + 5 process | Medium | v1.3 retrofitted ✓ (v1.21.1) |
 | R They OK | `main` | 1.3 | 4 domain + 3 process | Light | v1.2 retrofitted ✓ — v1.3 update pending |
 | Thunkit Factory | `main` | 1.3 | 4 domain + 3 process | Medium | v1.2 retrofitted ✓ — v1.3 update pending |
