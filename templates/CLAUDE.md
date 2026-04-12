@@ -45,6 +45,32 @@ Context gets lost across sessions and compactions. Real incidents from this proj
 1. **Don't skip context recovery** — even for "one quick change."
 2. [Add project-specific anti-patterns as they're discovered]
 
+## Test Coverage
+
+Test coverage is non-negotiable on every change:
+
+- **Functional changes** require updated or new tests covering the changed logic
+- **UI changes** require a smoke test or regression test (manual verification is acceptable if documented in the commit message — automated is preferred)
+- **Bug fixes** require a regression test that fails before the fix and passes after
+- **Any change without test deltas needs written justification** in the commit message
+
+Release commits should cite total test count and pass rate:
+```
+... 193/193 tests pass
+```
+
+### UI Verification Checklist
+
+When changing UI code (widgets, layouts, forms, navigation):
+
+- [ ] Component renders without errors
+- [ ] Interactive state persists correctly across reruns
+- [ ] Data refresh works when context changes
+- [ ] Mobile/small-screen layout still works
+- [ ] No regressions in adjacent components
+
+Document which items were verified in the commit message. "UI verified in-browser against [test data]" is acceptable — silent UI changes are not.
+
 ## Worktree Workflow
 
 All feature work happens in worktrees, never directly on `main`.

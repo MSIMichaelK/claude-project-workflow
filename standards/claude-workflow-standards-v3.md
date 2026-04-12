@@ -1,11 +1,17 @@
 # Claude Project Workflow Standards
-**Version:** 1.3 — 2026-03-27
+**Version:** 1.5 — 2026-04-12
 
 > Deterministic enforcement of context loading, issue discipline, and release integrity across Claude Code projects. Derived from patterns across HA_Home, Scores4Streams V2, Edge Hunter (NRL), R They OK, and Thunkit Factory.
 
 ---
 
 ## Standard Changelog
+
+### 1.5 — 2026-04-12 (test coverage + UI verification + hard proof gate)
+- **Test coverage policy** formalised — every change requires test deltas or written justification. Release commits must cite test count and pass rate (pattern: `193/193 tests pass`). Derived from Edge Hunter v1.27–v1.28 cycle where policy enforcement caught 62 new tests across 3 releases.
+- **UI verification checklist** added to CLAUDE.md template — 5 items to verify after any widget/layout change. Manual verification acceptable if documented in commit message; automated preferred.
+- **Hard proof gate** in `context-recovery.sh` confirmed as standard pattern — STOP line at top, `DO NOT PROCEED` box at bottom, hard compact path. Fixed context-skipping symptom in both HA_Home and Edge Hunter.
+- **Framework antipattern rule** added to as-built.md guidance — when 3+ antipatterns are discovered in a framework, formalise them as a numbered list (e.g. Streamlit Widget Rules in Edge Hunter AB-027).
 
 ### 1.4 — 2026-03-28 (retrofit verification + post-retrofit audit)
 - Retrofit steps rewritten with explicit "Verify by" lines — each step must be confirmed before ticking
@@ -257,6 +263,18 @@ Decisions about how something was implemented *within* the architecture — thin
 Both reference the GitHub issue where the full design discussion and rejected alternatives live.
 
 **Existing project numbering:** Projects that predate this standard keep their existing numbering schemes (e.g. D1-D55 in RTheyOK, inline numbers in NRL). Use ADR-xxx/AB-xxx prefixes for new projects only.
+
+### Framework Antipattern Rule
+
+When you discover **3+ antipatterns** in a framework or library that have caused real bugs, formalise them as a numbered list in a single AB entry. This prevents the same pattern from being rediscovered repeatedly.
+
+Example from Edge Hunter AB-027 (Streamlit):
+> 1. Never combine `index=` and `key=` on the same widget
+> 2. Never update `st.query_params` inline after reading a widget  
+> 3. Never compare return value + call `st.rerun()`
+> 4. Any widget that changes data context must call `st.cache_data.clear()`
+
+The list should also be referenced from the relevant topic skill (e.g. `dashboard-ui.md`) so future sessions pick it up automatically.
 
 ### ADR Entry Format
 
@@ -647,6 +665,8 @@ Every story and bug issue must complete this checklist before closing:
 - [ ] Non-obvious implementation decisions added to as-built.md
 - [ ] New regression risks added to relevant skill
 - [ ] CHANGELOG fragment written
+- [ ] Tests added or updated (or written justification for exemption)
+- [ ] UI changes verified (if applicable — in-browser or automated)
 
 This is the knowledge migration step — it moves durable knowledge out of the transient issue and into the permanent knowledge base. If skipped, the knowledge is buried in closed issue history and skills don't evolve.
 
