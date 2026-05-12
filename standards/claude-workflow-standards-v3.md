@@ -176,13 +176,21 @@ The SessionStart hook can detect the branch name and suggest the relevant topic 
 # If branch is issue-86-pool-pump, hint at the pool-solar skill
 branch=$(git branch --show-current 2>/dev/null || echo "")
 if [ -d ".claude/skills" ] && [ -n "$branch" ]; then
-  for skill in .claude/skills/*.md; do
-    skill_name=$(basename "$skill" .md)
-    # Check if any keyword from skill description matches branch name
-    if grep -qi "$(echo "$branch" | tr '-' ' ')" "$skill" 2>/dev/null; then
-      echo "Suggested Tier 3 skill: $skill"
+  # Skills live at .claude/skills/<name>/SKILL.md (Claude Code 2.1.x).
+  # Match skill directory name as a hyphen-bounded substring of the branch,
+  # preferring the longest match so e.g. branch `thesis-assembly-feature`
+  # picks `thesis-assembly` over `thesis`. Name match only — body grep
+  # produces false positives (a "spike" branch matching the audio skill).
+  branch_norm="-$(echo "$branch" | tr '/_' '-')-"
+  suggest=""; suggest_len=0
+  for skill in .claude/skills/*/SKILL.md; do
+    skill_name=$(basename "$(dirname "$skill")")
+    [ ${#skill_name} -lt 4 ] && continue
+    if [[ "$branch_norm" == *"-$skill_name-"* ]] && [ ${#skill_name} -gt $suggest_len ]; then
+      suggest="$skill_name"; suggest_len=${#skill_name}
     fi
   done
+  [ -n "$suggest" ] && echo "Suggested Tier 3 skill: $suggest"
 fi
 ```
 
@@ -1057,19 +1065,22 @@ fi
 echo ""
 
 # -- Tier 3 hint from branch name ----------------------------------------------
+# Skills live at .claude/skills/<name>/SKILL.md. Match by directory name as a
+# hyphen-bounded substring of the branch, preferring the longest match.
 branch=$(git branch --show-current 2>/dev/null || echo "")
 if [ -d "$PROJECT_DIR/.claude/skills" ] && [ -n "$branch" ] && [ "$branch" != "main" ]; then
-  branch_words=$(echo "$branch" | tr '-' '\n' | tr '_' '\n')
-  for skill in "$PROJECT_DIR"/.claude/skills/*.md; do
+  branch_norm="-$(echo "$branch" | tr '/_' '-')-"
+  suggest=""; suggest_len=0
+  for skill in "$PROJECT_DIR"/.claude/skills/*/SKILL.md; do
     [ -f "$skill" ] || continue
-    for word in $branch_words; do
-      [ ${#word} -lt 4 ] && continue
-      if grep -qi "$word" "$skill" 2>/dev/null; then
-        echo "Then load skill: $(basename "$skill")"
-        break 2
-      fi
-    done
+    skill_name=$(basename "$(dirname "$skill")")
+    [[ "$skill_name" == process-* ]] && continue
+    [ ${#skill_name} -lt 4 ] && continue
+    if [[ "$branch_norm" == *"-$skill_name-"* ]] && [ ${#skill_name} -gt $suggest_len ]; then
+      suggest="$skill_name"; suggest_len=${#skill_name}
+    fi
   done
+  [ -n "$suggest" ] && echo "Then load skill: $suggest"
 fi
 
 # -- Compaction warning ---------------------------------------------------------

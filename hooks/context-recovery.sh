@@ -75,17 +75,19 @@ fi
 echo ""
 
 # -- Tier 3: topic skills ------------------------------------------------------
+# Claude Code 2.1.x requires .claude/skills/<name>/SKILL.md (subdirectory form).
+# Flat .claude/skills/<name>.md files are silently ignored by the loader.
 if [ -d "$PROJECT_DIR/.claude/skills" ]; then
-  skill_count=$(find "$PROJECT_DIR/.claude/skills" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+  skill_count=$(find "$PROJECT_DIR/.claude/skills" -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
   if [ "$skill_count" -gt 0 ]; then
     echo "TIER 3 — Load the topic skill for your task BEFORE starting:"
     echo ""
-    for skill in "$PROJECT_DIR"/.claude/skills/*.md; do
+    for skill in "$PROJECT_DIR"/.claude/skills/*/SKILL.md; do
       [ -f "$skill" ] || continue
-      echo "  $(basename "$skill")"
+      echo "  $(basename "$(dirname "$skill")")"
     done
     echo ""
-    echo "Read the skill file — it tells you which docs and sections to load."
+    echo "Read the skill's SKILL.md — it tells you which docs and sections to load."
     echo ""
   fi
 fi
@@ -115,19 +117,29 @@ if [ "$MODE" = "worktree" ] && [ "$branch" = "main" ]; then
 fi
 
 # -- Tier 3 hint from branch name ---------------------------------------------
+# Match by skill directory name as a hyphen-bounded substring of the branch.
+# Picks the longest match — e.g. branch `thesis-assembly-feature` prefers
+# `thesis-assembly` over `thesis`. Pure name match; body-grep was removed
+# in v1.5.1 (KFO F-040) because it produced false positives — e.g. branches
+# matched `audio` skill because the word "spike" appeared in its body.
 if [ -d "$PROJECT_DIR/.claude/skills" ] && [ -n "$branch" ] && [ "$branch" != "main" ]; then
-  branch_words=$(echo "$branch" | tr '-' '\n' | tr '_' '\n')
-  for skill in "$PROJECT_DIR"/.claude/skills/*.md; do
+  branch_norm="-$(echo "$branch" | tr '/_' '-')-"
+  suggest=""
+  suggest_len=0
+  for skill in "$PROJECT_DIR"/.claude/skills/*/SKILL.md; do
     [ -f "$skill" ] || continue
-    for word in $branch_words; do
-      [ ${#word} -lt 4 ] && continue
-      if grep -qi "$word" "$skill" 2>/dev/null; then
-        echo ">>> Suggested skill for this branch: $(basename "$skill")"
-        echo ""
-        break 2
-      fi
-    done
+    skill_name=$(basename "$(dirname "$skill")")
+    [[ "$skill_name" == process-* ]] && continue
+    [ ${#skill_name} -lt 4 ] && continue
+    if [[ "$branch_norm" == *"-$skill_name-"* ]] && [ ${#skill_name} -gt $suggest_len ]; then
+      suggest="$skill_name"
+      suggest_len=${#skill_name}
+    fi
   done
+  if [ -n "$suggest" ]; then
+    echo ">>> Suggested skill for this branch: $suggest"
+    echo ""
+  fi
 fi
 
 # -- Unassembled fragments check -----------------------------------------------
