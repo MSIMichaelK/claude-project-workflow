@@ -110,7 +110,7 @@ Six independently-invented mechanisms the standard doesn't document:
 
 Latent bug: NRL still uses flat `<name>.md` skills AND the hook still globs `*.md` — both bugs cancel out, but the moment skills migrate, KFO's F-040 symptom appears.
 
-Key files: `~/Documents/GitHub/NRL_Bet_Model/.claude/`, `.github/workflows/ci.yml`, `.github/PULL_REQUEST_TEMPLATE.md`, `.github/ISSUE_TEMPLATE/`, `CLAUDE.md:138-153`, `tests/e2e/conftest.py`, `tests/test_dashboard_widget_keys.py`, `docs/findings.md`, `docs/as-built.md` AB-040..AB-048.
+Key files: `NRL_Bet_Model/.claude/`, `.github/workflows/ci.yml`, `.github/PULL_REQUEST_TEMPLATE.md`, `.github/ISSUE_TEMPLATE/`, `CLAUDE.md:138-153`, `tests/e2e/conftest.py`, `tests/test_dashboard_widget_keys.py`, `docs/findings.md`, `docs/as-built.md` AB-040..AB-048.
 
 ### Scores4Streams V2 audit — 2026-05-12
 
@@ -179,7 +179,7 @@ Cluster B runs in parallel; cluster A's v2 writeup doesn't need to wait for it.
 
 ## Related artefacts
 
-- KFO F-040 (`~/Documents/GitHub/kronk_family_office/docs/findings.md:917`) — symptom-1 finding that surfaced the standard's under-prescription
+- KFO F-040 (`docs/findings.md:917` in KFO) — symptom-1 finding that surfaced the standard's under-prescription
 - KFO #132 — symptom-1 investigation tracker with diagnosis summary in first comment
 - KFO #133 — KFO-side hook patch (F-040 option b), pending fresh KFO session
 - `claude-project-workflow` commit `d6cd23e` — symptom-1 primary fix (hook + standards code blocks), unpushed at time of decisions-log creation

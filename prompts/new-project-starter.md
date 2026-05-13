@@ -6,6 +6,9 @@
 > Before using this prompt: have you completed the greenfield planning flow?
 >   docs/concept.md  →  spike(s)  →  prototype (optional)  →  docs/requirements.md
 > If not, consider running that first — see the BA Analyst and PM process skills.
+>
+> `<cpw-repo>` below refers to your local clone of `claude-project-workflow`.
+> Replace it with the actual path before pasting (e.g. `~/code/claude-project-workflow`).
 
 ---
 
@@ -15,7 +18,7 @@
 Set up this project with the Claude workflow standard v1.3.
 
 Read the standard first:
-  ~/Documents/GitHub/claude-project-workflow/standards/claude-workflow-standards-v3.md
+  <cpw-repo>/standards/claude-workflow-standards-v3.md
 
 Then do the following:
 
@@ -50,7 +53,7 @@ After I answer, create these files:
 └── README.md                  # Fragment format reference
 
 .github/
-└── ISSUE_TEMPLATE/            # Copy from ~/Documents/GitHub/claude-project-workflow/templates/github/ISSUE_TEMPLATE/
+└── ISSUE_TEMPLATE/            # Copy from <cpw-repo>/templates/github/ISSUE_TEMPLATE/
 
 Use the hook scripts from the standard document. Customise context-recovery.sh:
 - Replace placeholder standing rules with project-specific rules
@@ -95,15 +98,15 @@ With YAML frontmatter (name + description for auto-triggering) and empty section
 - Regression Risks
 
 Also copy the five process skills to .claude/skills/ (each as <name>/SKILL.md):
-  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ba-analyst/SKILL.md
+  <cpw-repo>/templates/skills/process-ba-analyst/SKILL.md
     → .claude/skills/process-ba-analyst/SKILL.md
-  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-product-manager/SKILL.md
+  <cpw-repo>/templates/skills/process-product-manager/SKILL.md
     → .claude/skills/process-product-manager/SKILL.md
-  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-scrum-master/SKILL.md
+  <cpw-repo>/templates/skills/process-scrum-master/SKILL.md
     → .claude/skills/process-scrum-master/SKILL.md
-  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ux-designer/SKILL.md
+  <cpw-repo>/templates/skills/process-ux-designer/SKILL.md
     → .claude/skills/process-ux-designer/SKILL.md
-  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-qa-tester/SKILL.md
+  <cpw-repo>/templates/skills/process-qa-tester/SKILL.md
     → .claude/skills/process-qa-tester/SKILL.md
 
 (setup.sh handles this automatically.)

@@ -6,6 +6,9 @@
 > Two scenarios:
 >   A. First-time retrofit — project has never had the workflow standard applied
 >   B. v1.3 update — project is on v1.3, adding issue templates, process skills, and updated release guard
+>
+> `<cpw-repo>` below refers to your local clone of `claude-project-workflow`.
+> Replace it with the actual path before pasting (e.g. `~/code/claude-project-workflow`).
 
 ---
 
@@ -15,8 +18,8 @@
 Retrofit this project to the Claude workflow standard v1.3.
 
 Read these in order:
-1. ~/Documents/GitHub/claude-project-workflow/standards/claude-workflow-standards-v3.md
-2. ~/Documents/GitHub/claude-project-workflow/plans/retrofit-<project>.md
+1. <cpw-repo>/standards/claude-workflow-standards-v3.md
+2. <cpw-repo>/plans/retrofit-<project>.md
 
 The retrofit plan has the specific steps, proposed context-files, and proposed
 topic skills for this project. Follow it.
@@ -72,28 +75,28 @@ When creating findings.md, assumptions.md, or other new docs:
 After core infrastructure is in place:
 
 1. Copy issue templates:
-   Copy all files from ~/Documents/GitHub/claude-project-workflow/templates/github/ISSUE_TEMPLATE/
+   Copy all files from <cpw-repo>/templates/github/ISSUE_TEMPLATE/
    to <project>/.github/ISSUE_TEMPLATE/
 
 2. Copy process skills:
    Skills live at <project>/.claude/skills/<name>/SKILL.md (Claude Code 2.1.x — flat
    .claude/skills/<name>.md is silently ignored by the loader). For each skill below,
    create the directory and copy its SKILL.md:
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ba-analyst/SKILL.md
+   - <cpw-repo>/templates/skills/process-ba-analyst/SKILL.md
      → <project>/.claude/skills/process-ba-analyst/SKILL.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-product-manager/SKILL.md
+   - <cpw-repo>/templates/skills/process-product-manager/SKILL.md
      → <project>/.claude/skills/process-product-manager/SKILL.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-scrum-master/SKILL.md
+   - <cpw-repo>/templates/skills/process-scrum-master/SKILL.md
      → <project>/.claude/skills/process-scrum-master/SKILL.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ux-designer/SKILL.md
+   - <cpw-repo>/templates/skills/process-ux-designer/SKILL.md
      → <project>/.claude/skills/process-ux-designer/SKILL.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-qa-tester/SKILL.md
+   - <cpw-repo>/templates/skills/process-qa-tester/SKILL.md
      → <project>/.claude/skills/process-qa-tester/SKILL.md
    (Or just run setup.sh from claude-project-workflow root — it copies the new layout
    automatically.)
 
 3. Install updated pre-release-guard:
-   Copy ~/Documents/GitHub/claude-project-workflow/hooks/pre-release-guard.sh
+   Copy <cpw-repo>/hooks/pre-release-guard.sh
    to <project>/.claude/hooks/pre-release-guard.sh
    (replaces the old single-issue guard)
 
@@ -125,7 +128,7 @@ After all infrastructure is in place:
 Update this project from workflow standard v1.3 to v1.3.
 
 Read the updated standard first:
-  ~/Documents/GitHub/claude-project-workflow/standards/claude-workflow-standards-v3.md
+  <cpw-repo>/standards/claude-workflow-standards-v3.md
 
 ### What v1.3 adds (three things only)
 
@@ -139,7 +142,7 @@ Read the updated standard first:
 1. Create .github/ISSUE_TEMPLATE/ if it doesn't exist
 
 2. Copy issue templates:
-   Copy all 6 files from ~/Documents/GitHub/claude-project-workflow/templates/github/ISSUE_TEMPLATE/
+   Copy all 6 files from <cpw-repo>/templates/github/ISSUE_TEMPLATE/
    to .github/ISSUE_TEMPLATE/
    Files: epic.md, story.md, spike.md, investigation.md, bug.md, chore.md
 
@@ -147,20 +150,20 @@ Read the updated standard first:
    Skills live at .claude/skills/<name>/SKILL.md (Claude Code 2.1.x — flat
    .claude/skills/<name>.md is silently ignored by the loader). For each skill below,
    create the directory and copy its SKILL.md:
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ba-analyst/SKILL.md
+   - <cpw-repo>/templates/skills/process-ba-analyst/SKILL.md
      → .claude/skills/process-ba-analyst/SKILL.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-product-manager/SKILL.md
+   - <cpw-repo>/templates/skills/process-product-manager/SKILL.md
      → .claude/skills/process-product-manager/SKILL.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-scrum-master/SKILL.md
+   - <cpw-repo>/templates/skills/process-scrum-master/SKILL.md
      → .claude/skills/process-scrum-master/SKILL.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ux-designer/SKILL.md
+   - <cpw-repo>/templates/skills/process-ux-designer/SKILL.md
      → .claude/skills/process-ux-designer/SKILL.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-qa-tester/SKILL.md
+   - <cpw-repo>/templates/skills/process-qa-tester/SKILL.md
      → .claude/skills/process-qa-tester/SKILL.md
    (Or re-run setup.sh — it copies the new layout automatically.)
 
 4. Replace pre-release-guard:
-   Copy ~/Documents/GitHub/claude-project-workflow/hooks/pre-release-guard.sh
+   Copy <cpw-repo>/hooks/pre-release-guard.sh
    to .claude/hooks/pre-release-guard.sh
    chmod +x .claude/hooks/pre-release-guard.sh
 
