@@ -447,45 +447,48 @@ A topic skill is a **navigator** — not a knowledge document. It contains preci
 
 ```
 ~/.claude/skills/
-└── release-management.md    Fragment format, hook behaviour, release assembly steps
+└── release-management/
+    └── SKILL.md             Fragment format, hook behaviour, release assembly steps
 ```
+
+Skills live at `.claude/skills/<name>/SKILL.md` (Claude Code 2.1.x). Flat `<name>.md` files at the top of `.claude/skills/` are silently ignored by the loader.
 
 ### Project Skill Examples
 
 **HA_Home:**
 ```
 .claude/skills/
-├── energy-monitoring.md     ADR-002, AB-001-AB-006, energy-investigation.md B-001-B-008
-├── alarm-integration.md     ADR-005, relevant AB entries, issues #45 #52
-├── pool-solar.md            AB-012-AB-015, energy-investigation.md B-009-B-012
-└── dashboard.md             AB-008-AB-011, entity naming conventions
+├── energy-monitoring/SKILL.md   ADR-002, AB-001-AB-006, energy-investigation.md B-001-B-008
+├── alarm-integration/SKILL.md   ADR-005, relevant AB entries, issues #45 #52
+├── pool-solar/SKILL.md          AB-012-AB-015, energy-investigation.md B-009-B-012
+└── dashboard/SKILL.md           AB-008-AB-011, entity naming conventions
 ```
 
 **Scores4Streams V2:**
 ```
 .claude/skills/
-├── batting-engine.md        AB-003 AB-004 AB-006, isPitch rules, regression tests
-├── data-model.md            ADR-001, AB-001 AB-002 AB-011, dual-write, schema
-├── scoring-modes.md         AB-008, simple vs advanced gate rules
-└── undo-system.md           AB-011, soft-delete pattern
+├── batting-engine/SKILL.md      AB-003 AB-004 AB-006, isPitch rules, regression tests
+├── data-model/SKILL.md          ADR-001, AB-001 AB-002 AB-011, dual-write, schema
+├── scoring-modes/SKILL.md       AB-008, simple vs advanced gate rules
+└── undo-system/SKILL.md         AB-011, soft-delete pattern
 ```
 
 **Edge Hunter (NRL):**
 ```
 .claude/skills/
-├── betting-model.md         ADR-003-ADR-008, model constants, override vs market edge
-├── odds-pipeline.md         ADR-012, pregame cutoff, round assignment, outcome_name
-├── deployment.md            ADR-021, Pi deploy path, two-directory setup, cron gotchas
-└── ui-voting.md             ADR-031, vote threshold, apply_suggestion timing
+├── betting-model/SKILL.md       ADR-003-ADR-008, model constants, override vs market edge
+├── odds-pipeline/SKILL.md       ADR-012, pregame cutoff, round assignment, outcome_name
+├── deployment/SKILL.md          ADR-021, Pi deploy path, two-directory setup, cron gotchas
+└── ui-voting/SKILL.md           ADR-031, vote threshold, apply_suggestion timing
 ```
 
 **R They OK:**
 ```
 .claude/skills/
-├── baseline-engine.md       ADR-004, AB-001-AB-006, Flask API patterns
-├── ha-addon.md              F-001-F-006 (all addon gotchas), AB-007-AB-010
-├── sensor-pairing.md        ADR-007, current paired/disabled state, ZHA channel
-└── deployment.md            F-003 F-004, two-environment rules, SCP not heredoc
+├── baseline-engine/SKILL.md     ADR-004, AB-001-AB-006, Flask API patterns
+├── ha-addon/SKILL.md            F-001-F-006 (all addon gotchas), AB-007-AB-010
+├── sensor-pairing/SKILL.md      ADR-007, current paired/disabled state, ZHA channel
+└── deployment/SKILL.md          F-003 F-004, two-environment rules, SCP not heredoc
 ```
 
 ### Skill Body Format
@@ -611,7 +614,7 @@ Never bare `gh issue close N`. Before closing, post a structured comment:
 - A-008: [title] — CONFIRMED / DISPROVED
 
 ### Skill updated
-- .claude/skills/[domain].md — references new ADR/AB entries
+- .claude/skills/[domain]/SKILL.md — references new ADR/AB entries
 
 ### Topic investigation updated
 - docs/[topic]-investigation.md — B-012 status updated
@@ -777,14 +780,16 @@ Process skills are a distinct category from domain (topic) skills. They tell Cla
 
 ```
 .claude/skills/
-  process-ba-analyst.md        ← copied to every project by setup.sh
-  process-product-manager.md   ← copied to every project by setup.sh
-  process-scrum-master.md      ← copied to every project by setup.sh
-  [domain-a].md                ← project-specific topic skill
-  [domain-b].md                ← project-specific topic skill
+  process-ba-analyst/SKILL.md        ← copied to every project by setup.sh
+  process-product-manager/SKILL.md   ← copied to every project by setup.sh
+  process-scrum-master/SKILL.md      ← copied to every project by setup.sh
+  process-ux-designer/SKILL.md       ← copied to every project by setup.sh
+  process-qa-tester/SKILL.md         ← copied to every project by setup.sh
+  [domain-a]/SKILL.md                ← project-specific topic skill
+  [domain-b]/SKILL.md                ← project-specific topic skill
 ```
 
-Templates at `templates/skills/process-*.md`.
+Templates at `templates/skills/process-*/SKILL.md`.
 
 ---
 
@@ -821,7 +826,7 @@ Working on issue #[N]: [title]
 
 Tier 2 was loaded by SessionStart hook. Now load Tier 3:
 
-1. Load skill: .claude/skills/[domain].md
+1. Load skill: .claude/skills/[domain]/SKILL.md
 2. Read the ADR and AB entries listed in the skill
 3. Read the findings listed in the skill (if any)
 4. Fetch issue history:
@@ -852,7 +857,7 @@ Scope: [one sentence — what this session will and won't do]
 
 - `docs/as-built.md` — new AB-xxx entries (appended at bottom)
 - `ARCHITECTURE.md` — new ADR-xxx entries, system diagram updates
-- `.claude/skills/[domain].md` — add new ADR/AB references to navigator
+- `.claude/skills/[domain]/SKILL.md` — add new ADR/AB references to navigator
 - `docs/findings.md` — new findings discovered during work
 - `docs/assumptions.md` — new assumptions raised, or resolved during work
 - `docs/[topic]-investigation.md` — belief and test updates
@@ -1452,16 +1457,16 @@ user-docs: false
 │   ├── pre-pr-guard.sh              PreToolUse — gh pr create gate
 │   └── pre-release-guard.sh         PreToolUse — git tag gate (v1.3: accepts issue list)
 └── skills/
-    ├── process-ba-analyst.md        Process skill — BA Analyst persona (copied by setup.sh)
-    ├── process-product-manager.md   Process skill — PM persona (copied by setup.sh)
-    ├── process-scrum-master.md      Process skill — Scrum Master persona (copied by setup.sh)
-    ├── process-ux-designer.md       Process skill — UX Designer persona (copied by setup.sh)
-    ├── process-qa-tester.md         Process skill — QA Tester persona (copied by setup.sh)
-    ├── [domain-a].md                Topic skill navigator (project-specific)
-    └── [domain-b].md                Topic skill navigator (project-specific)
+    ├── process-ba-analyst/SKILL.md        Process skill — BA Analyst persona (copied by setup.sh)
+    ├── process-product-manager/SKILL.md   Process skill — PM persona (copied by setup.sh)
+    ├── process-scrum-master/SKILL.md      Process skill — Scrum Master persona (copied by setup.sh)
+    ├── process-ux-designer/SKILL.md       Process skill — UX Designer persona (copied by setup.sh)
+    ├── process-qa-tester/SKILL.md         Process skill — QA Tester persona (copied by setup.sh)
+    ├── [domain-a]/SKILL.md                Topic skill navigator (project-specific)
+    └── [domain-b]/SKILL.md                Topic skill navigator (project-specific)
 
 ~/.claude/skills/
-└── release-management.md            Global — shared across all projects
+└── release-management/SKILL.md            Global — shared across all projects
 
 .changelog/
 ├── README.md                        Fragment format reference (never deleted)
@@ -1569,7 +1574,7 @@ touch docs/assumptions.md      # recommended for all projects
 touch docs/beliefs-and-tests.md  # if empirical investigation
 
 # 9. Create topic skills per domain
-# .claude/skills/[domain].md — see navigator template above
+# .claude/skills/[domain]/SKILL.md — see navigator template above
 
 # 10. Add two-environment table to CLAUDE.md if dev + production
 ```
@@ -1606,8 +1611,8 @@ One session of work per project. Each step has a **Verify by** line — do not t
 8. **Configure version-files** — list all files containing version numbers.
    **Verify by:** `cat .claude/version-files` — lists at least one file; confirm that file exists.
 
-9. **Create topic skills** — one per domain, navigator format, referencing existing AB/F/ADR entries.
-   **Verify by:** `ls .claude/skills/*.md` — at least one skill per major domain. Each skill references actual file paths that exist.
+9. **Create topic skills** — one per domain, navigator format, referencing existing AB/F/ADR entries. Each skill lives at `.claude/skills/<name>/SKILL.md` (Claude Code 2.1.x — flat `<name>.md` files at the top of `.claude/skills/` are silently ignored).
+   **Verify by:** `ls .claude/skills/*/SKILL.md` — at least one skill per major domain. Each skill references actual file paths that exist.
 
 10. **Update CLAUDE.md** — set correct standard version string, add documentation map including as-built.md and findings.md, add hard rules. Trim to 1-2 pages — move detail into skills.
     **Verify by:** `grep "Workflow Standard" CLAUDE.md` shows correct version number. `grep "as-built\|findings" CLAUDE.md` — both appear in the Documentation Map.
@@ -1615,8 +1620,8 @@ One session of work per project. Each step has a **Verify by** line — do not t
 11. **Install issue templates** — copy the six templates to `.github/ISSUE_TEMPLATE/`.
     **Verify by:** `ls .github/ISSUE_TEMPLATE/` shows story.md, bug.md, epic.md, spike.md, investigation.md, chore.md.
 
-12. **Install process skills** — copy BA Analyst, PM, Scrum Master, UX Designer, QA Tester to `.claude/skills/`.
-    **Verify by:** `ls .claude/skills/process-*.md` shows five files.
+12. **Install process skills** — copy BA Analyst, PM, Scrum Master, UX Designer, QA Tester to `.claude/skills/` (each as `process-<name>/SKILL.md`). `setup.sh` does this automatically from the new subdirectory layout in `templates/skills/`.
+    **Verify by:** `ls .claude/skills/process-*/SKILL.md` shows five files.
 
 ### Post-Retrofit Verification Checklist
 
@@ -1653,7 +1658,7 @@ grep "findings" CLAUDE.md
 ls .github/ISSUE_TEMPLATE/{story,bug,epic,spike,investigation,chore}.md
 
 # 9. Process skills all present
-ls .claude/skills/process-{ba-analyst,product-manager,scrum-master,ux-designer,qa-tester}.md
+ls .claude/skills/process-{ba-analyst,product-manager,scrum-master,ux-designer,qa-tester}/SKILL.md
 
 # 10. Issue templates don't reference missing files
 # If findings.md exists: OK. If not, remove F-xxx references from story.md and spike.md.

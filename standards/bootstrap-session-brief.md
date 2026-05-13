@@ -50,7 +50,7 @@
 - Skills are NOT knowledge documents — they are POINTERS to existing knowledge
 - Content: ADR/AB entry numbers, findings numbers, issue numbers to fetch, regression risks
 - Descriptions must be precise enough for auto-triggering (specific filenames, entity names, urgency phrase)
-- Global skill `~/.claude/skills/release-management.md` shared across all projects
+- Global skill `~/.claude/skills/release-management/SKILL.md` shared across all projects
 
 ### Process Skills (v1.3)
 - Three process skills copied to every project by setup.sh: process-ba-analyst, process-product-manager, process-scrum-master

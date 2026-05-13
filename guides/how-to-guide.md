@@ -30,8 +30,8 @@ It prevents Claude from losing context between sessions and from making changes 
 
 ### Tier 3: Topic and Process Skills
 - Loaded per-task via a starter prompt or auto-detected from branch name
-- **Topic skills** — domain navigators in `.claude/skills/` pointing to ADR entries, AB entries, findings, and issues
-- **Process skills** — planning personas in `.claude/skills/process-*.md` for concept docs, PRDs, and story planning
+- **Topic skills** — domain navigators at `.claude/skills/<domain>/SKILL.md` pointing to ADR entries, AB entries, findings, and issues
+- **Process skills** — planning personas at `.claude/skills/process-*/SKILL.md` for concept docs, PRDs, and story planning
 - **To use:** paste the worktree starter prompt when starting work, or let the SessionStart hook suggest one based on your branch name
 
 ---
@@ -154,8 +154,8 @@ Skip this and the knowledge is buried in closed issue history.
 | `.claude/hooks/pre-commit-guard.sh` | Blocks bad commits |
 | `.claude/hooks/pre-pr-guard.sh` | Blocks bad PRs |
 | `.claude/hooks/pre-release-guard.sh` | Blocks bad releases — v1.3: accepts issue list |
-| `.claude/skills/<domain>.md` | Topic skill navigators |
-| `.claude/skills/process-*.md` | Process skills (BA Analyst, PM, Scrum Master) |
+| `.claude/skills/<domain>/SKILL.md` | Topic skill navigators |
+| `.claude/skills/process-*/SKILL.md` | Process skills (BA Analyst, PM, Scrum Master, UX Designer, QA Tester) |
 | `.github/ISSUE_TEMPLATE/` | Issue templates (epic, story, spike, investigation, bug, chore) |
 | `.changelog/<issue>-<slug>.md` | Changelog fragments (assembled at release) |
 | `docs/concept.md` | Initial project concept — written once, not updated |
@@ -243,15 +243,15 @@ When you add a new ADR, AB, or finding, add a reference to the relevant skill. I
 
 ## Process Skills
 
-Three planning personas are installed in every project under `.claude/skills/`:
+Five planning personas are installed in every project under `.claude/skills/` (each at `<name>/SKILL.md`):
 
 | Skill | Use when |
 |---|---|
-| `process-ba-analyst.md` | Starting a new project — produce docs/concept.md |
-| `process-product-manager.md` | After spikes — produce docs/requirements.md |
-| `process-scrum-master.md` | Breaking an epic into stories — throughout project lifecycle |
-| `process-ux-designer.md` | Any UI/UX work — audit existing patterns, document decisions as AB entries |
-| `process-qa-tester.md` | Writing tests, reviewing coverage, pre-release test check |
+| `process-ba-analyst/SKILL.md` | Starting a new project — produce docs/concept.md |
+| `process-product-manager/SKILL.md` | After spikes — produce docs/requirements.md |
+| `process-scrum-master/SKILL.md` | Breaking an epic into stories — throughout project lifecycle |
+| `process-ux-designer/SKILL.md` | Any UI/UX work — audit existing patterns, document decisions as AB entries |
+| `process-qa-tester/SKILL.md` | Writing tests, reviewing coverage, pre-release test check |
 
 **Spotting stale skills:** every skill has a `last-updated` date in its frontmatter. If it's significantly older than your most recent release, review it for missing AB entries or regression risks.
 

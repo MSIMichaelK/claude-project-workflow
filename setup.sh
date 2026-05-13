@@ -301,15 +301,20 @@ done
 echo ""
 
 # -- Process skills ------------------------------------------------------------
+# Skills live at .claude/skills/<name>/SKILL.md (Claude Code 2.1.x). Flat
+# .claude/skills/<name>.md is silently ignored by the loader.
 echo "Process skills:"
-for skill in "$SCRIPT_DIR/templates/skills/process-"*.md; do
-  [ -f "$skill" ] || continue
-  dest="$PROJECT_DIR/.claude/skills/$(basename "$skill")"
+for skill_src in "$SCRIPT_DIR/templates/skills/process-"*/SKILL.md; do
+  [ -f "$skill_src" ] || continue
+  skill_name=$(basename "$(dirname "$skill_src")")
+  dest_dir="$PROJECT_DIR/.claude/skills/$skill_name"
+  dest="$dest_dir/SKILL.md"
   if [[ -f "$dest" ]]; then
-    echo "  SKIP  $(basename "$skill") (already exists)"
+    echo "  SKIP  $skill_name (already exists)"
   else
-    cp "$skill" "$dest"
-    echo "  CREATE $(basename "$skill")"
+    mkdir -p "$dest_dir"
+    cp "$skill_src" "$dest"
+    echo "  CREATE $skill_name/SKILL.md"
   fi
 done
 echo ""

@@ -41,7 +41,7 @@ A greenfield flow and process skills (BA Analyst, Product Manager, Scrum Master)
 
 ```
 standards/
-  claude-workflow-standards-v3.md   Complete workflow standard (current: v1.3)
+  claude-workflow-standards-v3.md   Complete workflow standard (current: v1.5.1)
 
 templates/
   CLAUDE.md                         Session rules template
@@ -53,9 +53,11 @@ templates/
   beliefs-and-tests.md              Investigation journal template
   github/ISSUE_TEMPLATE/            Issue templates (epic, story, spike, investigation, bug, chore)
   skills/
-    process-ba-analyst.md           Business Analyst persona skill
-    process-product-manager.md      Product Manager persona skill
-    process-scrum-master.md         Scrum Master persona skill
+    process-ba-analyst/SKILL.md        Business Analyst persona skill
+    process-product-manager/SKILL.md   Product Manager persona skill
+    process-scrum-master/SKILL.md      Scrum Master persona skill
+    process-ux-designer/SKILL.md       UX Designer persona skill
+    process-qa-tester/SKILL.md         QA Tester persona skill
 
 hooks/
   context-recovery.sh               SessionStart hook template

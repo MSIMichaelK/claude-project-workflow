@@ -82,7 +82,10 @@ If the project has dev + production environments, add the two-environment table 
 
 For each domain area I listed, create a skeleton skill navigator:
 
-.claude/skills/<domain>.md
+.claude/skills/<domain>/SKILL.md
+
+(Skills live at `.claude/skills/<name>/SKILL.md` in Claude Code 2.1.x — flat
+`.claude/skills/<name>.md` files are silently ignored by the loader.)
 
 With YAML frontmatter (name + description for auto-triggering) and empty sections for:
 - Architecture Decisions
@@ -91,12 +94,19 @@ With YAML frontmatter (name + description for auto-triggering) and empty section
 - Issue History
 - Regression Risks
 
-Also copy the five process skills to .claude/skills/:
-  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ba-analyst.md
-  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-product-manager.md
-  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-scrum-master.md
-  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ux-designer.md
-  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-qa-tester.md
+Also copy the five process skills to .claude/skills/ (each as <name>/SKILL.md):
+  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ba-analyst/SKILL.md
+    → .claude/skills/process-ba-analyst/SKILL.md
+  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-product-manager/SKILL.md
+    → .claude/skills/process-product-manager/SKILL.md
+  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-scrum-master/SKILL.md
+    → .claude/skills/process-scrum-master/SKILL.md
+  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ux-designer/SKILL.md
+    → .claude/skills/process-ux-designer/SKILL.md
+  ~/Documents/GitHub/claude-project-workflow/templates/skills/process-qa-tester/SKILL.md
+    → .claude/skills/process-qa-tester/SKILL.md
+
+(setup.sh handles this automatically.)
 
 These will be populated as the project accumulates decisions.
 
@@ -117,7 +127,7 @@ For brand new projects, run the planning phases first — before setup.sh and be
 
 ```
 Step 1 — Concept doc
-  Use the BA Analyst process skill: load .claude/skills/process-ba-analyst.md
+  Use the BA Analyst process skill: load .claude/skills/process-ba-analyst/SKILL.md
   Output: docs/concept.md
 
 Step 2 — Spike(s)
@@ -128,12 +138,12 @@ Step 3 — Prototype (optional)
   Rough build to prove the spike findings hold
 
 Step 4 — PRD
-  Use the PM process skill: load .claude/skills/process-product-manager.md
+  Use the PM process skill: load .claude/skills/process-product-manager/SKILL.md
   Input: concept.md + spike output
   Output: docs/requirements.md
 
 Step 5 — Epics and stories
-  Use the Scrum Master process skill: load .claude/skills/process-scrum-master.md
+  Use the Scrum Master process skill: load .claude/skills/process-scrum-master/SKILL.md
   Input: requirements.md
   Output: GitHub epic and story issues
 

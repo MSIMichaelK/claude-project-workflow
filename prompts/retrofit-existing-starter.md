@@ -76,12 +76,21 @@ After core infrastructure is in place:
    to <project>/.github/ISSUE_TEMPLATE/
 
 2. Copy process skills:
-   Copy these five files to <project>/.claude/skills/:
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ba-analyst.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-product-manager.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-scrum-master.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ux-designer.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-qa-tester.md
+   Skills live at <project>/.claude/skills/<name>/SKILL.md (Claude Code 2.1.x — flat
+   .claude/skills/<name>.md is silently ignored by the loader). For each skill below,
+   create the directory and copy its SKILL.md:
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ba-analyst/SKILL.md
+     → <project>/.claude/skills/process-ba-analyst/SKILL.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-product-manager/SKILL.md
+     → <project>/.claude/skills/process-product-manager/SKILL.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-scrum-master/SKILL.md
+     → <project>/.claude/skills/process-scrum-master/SKILL.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ux-designer/SKILL.md
+     → <project>/.claude/skills/process-ux-designer/SKILL.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-qa-tester/SKILL.md
+     → <project>/.claude/skills/process-qa-tester/SKILL.md
+   (Or just run setup.sh from claude-project-workflow root — it copies the new layout
+   automatically.)
 
 3. Install updated pre-release-guard:
    Copy ~/Documents/GitHub/claude-project-workflow/hooks/pre-release-guard.sh
@@ -95,7 +104,7 @@ After all infrastructure is in place:
 - Attempt a git commit without a changelog fragment — confirm it's blocked
 - If worktree mode: attempt a commit on main — confirm it's blocked
 - Confirm .github/ISSUE_TEMPLATE/ contains all 6 templates
-- Confirm .claude/skills/ contains the 3 process skills
+- Confirm .claude/skills/ contains the 5 process skills (each at process-*/SKILL.md)
 - Show me the final .claude/ directory tree
 
 ### What NOT to do in this session
@@ -135,12 +144,20 @@ Read the updated standard first:
    Files: epic.md, story.md, spike.md, investigation.md, bug.md, chore.md
 
 3. Copy process skills:
-   Copy these 5 files to .claude/skills/:
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ba-analyst.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-product-manager.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-scrum-master.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ux-designer.md
-   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-qa-tester.md
+   Skills live at .claude/skills/<name>/SKILL.md (Claude Code 2.1.x — flat
+   .claude/skills/<name>.md is silently ignored by the loader). For each skill below,
+   create the directory and copy its SKILL.md:
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ba-analyst/SKILL.md
+     → .claude/skills/process-ba-analyst/SKILL.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-product-manager/SKILL.md
+     → .claude/skills/process-product-manager/SKILL.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-scrum-master/SKILL.md
+     → .claude/skills/process-scrum-master/SKILL.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-ux-designer/SKILL.md
+     → .claude/skills/process-ux-designer/SKILL.md
+   - ~/Documents/GitHub/claude-project-workflow/templates/skills/process-qa-tester/SKILL.md
+     → .claude/skills/process-qa-tester/SKILL.md
+   (Or re-run setup.sh — it copies the new layout automatically.)
 
 4. Replace pre-release-guard:
    Copy ~/Documents/GitHub/claude-project-workflow/hooks/pre-release-guard.sh
@@ -150,7 +167,7 @@ Read the updated standard first:
 ### Verification
 
 - Confirm .github/ISSUE_TEMPLATE/ has all 6 templates
-- Confirm .claude/skills/ has the 3 process-*.md skills
+- Confirm .claude/skills/ has the 5 process skills (each at process-*/SKILL.md)
 - Run: bash .claude/hooks/pre-release-guard.sh
   (should print usage message asking for issue numbers — that's correct)
 
@@ -188,7 +205,7 @@ Read in order:
 Then:
 - Identify 3-6 natural domain clusters in the accumulated decisions
 - Post proposed domain list first — wait for approval before writing files
-- For each approved domain, draft .claude/skills/<domain>.md navigator:
+- For each approved domain, draft .claude/skills/<domain>/SKILL.md navigator:
   - YAML frontmatter with name and precise auto-trigger description
   - ADR references from ARCHITECTURE.md
   - AB references from as-built.md
